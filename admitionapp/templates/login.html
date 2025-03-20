@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile OTP Registration</title>
+    <!-- Include jQuery for AJAX requests -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input[type="text"], input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .otp-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .otp-container input {
+            width: 45px;
+            height: 45px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .timer {
+            text-align: center;
+            margin-top: 10px;
+            color: #777;
+        }
+        .alert {
+            padding: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        #debug-console {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .debug-info {
+            color: #0066cc;
+        }
+        .debug-error {
+            color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mobile Registration</h1>
+        <div id="alert" class="alert"></div>
+        
+        <!-- Step 1: Enter Phone Number -->
+        <div id="phoneStep">
+            <form id="mobileForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="mobile">Enter your mobile number:</label>
+                    <input type="tel" id="mobile" name="mobile" placeholder="Enter mobile number" pattern="[0-9]{10}" required>
+                </div>
+                <button type="submit" id="getOtpBtn">Get OTP</button>
+            </form>
+            <!-- Emergency button to force display OTP step -->
+            <button type="button" onclick="forceShowOtpStep()" style="margin-top: 10px; background-color: #6c757d;">
+                Show OTP Input (If OTP Received)
+            </button>
+        </div>
+        
+        <!-- Step 2: Enter OTP -->
+        <div id="otpStep" style="display: none;">
+            <form id="otpForm">
+                {% csrf_token %}
+                <input type="hidden" id="otpMobile" name="mobile">
+                <div class="form-group">
+                    <label for="otp">Enter OTP sent to your mobile:</label>
+                    <div class="otp-container">
+                        <input type="text" maxlength="1" id="otp1" class="otp-input">
+                        <input type="text" maxlength="1" id="otp2" class="otp-input">
+                        <input type="text" maxlength="1" id="otp3" class="otp-input">
+                        <input type="text" maxlength="1" id="otp4" class="otp-input">
+                        <input type="text" maxlength="1" id="otp5" class="otp-input">
+                        <input type="text" maxlength="1" id="otp6" class="otp-input">
+                    </div>
+                    <input type="hidden" id="fullOtp" name="otp">
+                    <div class="timer" id="timer">Resend OTP in <span id="countdownTime">60</span> seconds</div>
+                </div>
+                <button type="submit" id="verifyOtpBtn">Verify & Register</button>
+            </form>
+            <button id="resendOtpBtn" style="display: none; margin-top: 10px; background-color: #6c757d;">Resend OTP</button>
+            <!-- Back button to return to phone input -->
+            <button type="button" onclick="backToPhoneStep()" style="margin-top: 10px; background-color: #6c757d;">
+                Back to Phone Input
+            </button>
+        </div>
+        
+        <!-- Step 3: Registration Complete -->
+        <div id="completeStep" style="display: none;">
+            <div class="form-group">
+                <div style="text-align: center; margin: 20px 0;">
+                    <svg width="80" height="80" viewBox="0 0 24 24" style="fill: #4CAF50;">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
+                <h2 style="text-align: center; color: #4CAF50;">Registration Successful!</h2>
+                <p style="text-align: center;">You have successfully registered with your mobile number.</p>
+            </div>
+            <button onclick="startOver()">Done</button>
+        </div>
+        
+        <!-- Debug Console -->
+        <div id="debug-console">
+            <p><strong>Debug Console:</strong></p>
+            <div id="debug-messages"></div>
+        </div>
+    </div>
+
+    <script>
+        let countdownTimer;
+        let mobileNumber = '';
+        
+        // Debug logging function
+        function debugLog(message, isError = false) {
+            const debugMessages = document.getElementById('debug-messages');
+            const messageEl = document.createElement('div');
+            messageEl.className = isError ? 'debug-error' : 'debug-info';
+            messageEl.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+            debugMessages.appendChild(messageEl);
+            debugMessages.scrollTop = debugMessages.scrollHeight;
+            console.log(message);
+        }
+        
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        // Set up CSRF token for AJAX requests
+        const csrftoken = getCookie('csrftoken');
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        
+        // Function to force show OTP step
+        function forceShowOtpStep() {
+            mobileNumber = document.getElementById('mobile').value;
+            if (mobileNumber.length !== 10 || isNaN(mobileNumber)) {
+                showAlert("Please enter a valid 10-digit mobile number first", false);
+                return;
+            }
+            
+            // Store mobile number for verification
+            document.getElementById('otpMobile').value = mobileNumber;
+            
+            // Show OTP step
+            document.getElementById('phoneStep').style.display = 'none';
+            document.getElementById('otpStep').style.display = 'block';
+            
+            // Focus on first OTP input
+            document.getElementById('otp1').focus();
+            
+            debugLog("Manually showed OTP input step");
+        }
+        
+        // Function to go back to phone step
+        function backToPhoneStep() {
+            document.getElementById('otpStep').style.display = 'none';
+            document.getElementById('phoneStep').style.display = 'block';
+            debugLog("Returned to phone input step");
+        }
+        
+        // Auto-tabbing for OTP input
+        document.addEventListener('DOMContentLoaded', function() {
+            debugLog("Page loaded, setting up event handlers");
+            
+            const otpInputs = document.querySelectorAll('.otp-input');
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', function() {
+                    if (this.value.length === 1) {
+                        if (index < otpInputs.length - 1) {
+                            otpInputs[index + 1].focus();
+                        }
+                    }
+                });
+                
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && !this.value) {
+                        if (index > 0) {
+                            otpInputs[index - 1].focus();
+                        }
+                    }
+                });
+            });
+            
+            // Setup form submissions
+            document.getElementById('mobileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                requestOTP();
+            });
+            
+            document.getElementById('otpForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                verifyOTP();
+            });
+            
+            document.getElementById('resendOtpBtn').addEventListener('click', function() {
+                requestOTP();
+            });
+        });
+        
+        // Request OTP function
+        // Request OTP function
+        function requestOTP() {
+    // Log to verify function execution
+    console.log("requestOTP function called at " + new Date().toLocaleTimeString());
+    
+    const mobileNumber = $("#mobile").val();
+    
+    $.ajax({
+        url: '/request-otp/',
+        type: 'POST',
+        data: {
+            'mobile': mobileNumber,
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+        },
+        success: function(response) {
+            console.log("OTP AJAX Response:", response);
+            
+            if (response.status === 'success') {
+                // Force direct DOM manipulation with !important styles
+                document.getElementById('phoneStep').style.cssText = "display: none !important";
+                document.getElementById('otpStep').style.cssText = "display: block !important";
+                
+                // Clear any previous OTP inputs
+                $(".otp-input").val("");
+                
+                // Focus on first OTP input
+                if ($(".otp-input").length > 0) {
+                    setTimeout(function() {
+                        $(".otp-input")[0].focus();
+                    }, 200);
+                }
+                
+                // Start countdown
+                startCountdown();
+                
+                // Show a success message
+                $("#otpMessage").html("<div class='alert alert-success'>OTP sent successfully!</div>");
+            } else {
+                $("#otpMessage").html("<div class='alert alert-danger'>" + response.message + "</div>");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX Error:", error);
+            $("#otpMessage").html("<div class='alert alert-danger'>Error: " + error + "</div>");
+        }
+    });
+}
+
+// Make sure the countdown function is properly defined
+function startCountdown() {
+    console.log("Starting countdown");
+    let timeLeft = 30;
+    $("#countdown").text(timeLeft);
+    $("#resendButton").prop("disabled", true);
+    
+    let countdownInterval = setInterval(function() {
+        timeLeft--;
+        $("#countdown").text(timeLeft);
+        
+        if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            $("#resendButton").prop("disabled", false);
+            $("#countdown").text("0");
+        }
+    }, 1000);
+}
+        
+        // Start countdown timer function
+       // Start countdown timer function
+function startCountdown() {
+    let timeLeft = 60;
+    document.getElementById('countdownTime').textContent = timeLeft;
+    document.getElementById('resendOtpBtn').style.display = 'none';
+    document.getElementById('timer').style.display = 'block';
+    
+    // Clear any existing timer
+    if (countdownTimer) {
+        clearInterval(countdownTimer);
+    }
+    
+    // Start a new countdown timer
+    countdownTimer = setInterval(() => {
+        timeLeft--;
+        
+        // Update the display
+        const countdownElement = document.getElementById('countdownTime');
+        if (countdownElement) {
+            countdownElement.textContent = timeLeft;
+        }
+        
+        // Debug the countdown progress
+        debugLog("Countdown: " + timeLeft + " seconds remaining");
+        
+        if (timeLeft <= 0) {
+            // Clear the interval when countdown reaches zero
+            clearInterval(countdownTimer);
+            document.getElementById('timer').style.display = 'none';
+            document.getElementById('resendOtpBtn').style.display = 'block';
+            debugLog("Countdown finished, resend button enabled");
+        }
+    }, 1000);
+    
+    // Debug that countdown has started
+    debugLog("Countdown timer started: 60 seconds");
+}
+        
+        // Verify OTP function
+        function verifyOTP() {
+            const inputs = document.querySelectorAll('.otp-input');
+            let enteredOTP = '';
+            
+            inputs.forEach(input => {
+                enteredOTP += input.value;
+            });
+            
+            if (enteredOTP.length !== 6) {
+                showAlert("Please enter a valid 6-digit OTP", false);
+                debugLog("Invalid OTP length: " + enteredOTP.length, true);
+                return;
+            }
+            
+            // Set the full OTP value
+            document.getElementById('fullOtp').value = enteredOTP;
+            const mobileNumber = document.getElementById('otpMobile').value;
+            
+            // Disable button while processing
+            document.getElementById('verifyOtpBtn').disabled = true;
+            debugLog("Verifying OTP: " + enteredOTP + " for mobile: " + mobileNumber);
+            
+            // Send AJAX request to Django backend
+            $.ajax({
+                url: '/verify_otp/',
+                type: 'POST',
+                data: {
+                    'mobile': mobileNumber,
+                    'otp': enteredOTP
+                },
+                success: function(response) {
+                    debugLog("OTP verification response received: " + JSON.stringify(response));
+                    // Enable button
+                    document.getElementById('verifyOtpBtn').disabled = false;
+                    
+                    if (response.status === 'Verified') {
+                        // Clear timer if exists
+                        if (countdownTimer) {
+                            clearInterval(countdownTimer);
+                        }
+                        
+                        // Show completion step
+                        document.getElementById('otpStep').style.display = 'none';
+                        document.getElementById('completeStep').style.display = 'block';
+                        
+                        // Show success message
+                        showAlert("Registration successful!", true);
+                        
+                        // Redirect if a URL is provided
+                        if (response.redirect_url) {
+                            debugLog("Redirecting to: " + response.redirect_url);
+                            setTimeout(() => {
+                                window.location.href = response.redirect_url;
+                            }, 2000);
+                        }
+                    } else {
+                        // Show error message
+                        showAlert(response.error || "Failed to verify OTP. Please try again.", false);
+                        debugLog("OTP verification failed: " + (response.error || "Unknown error"), true);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Enable button
+                    document.getElementById('verifyOtpBtn').disabled = false;
+                    
+                    // Show error message
+                    showAlert("Failed to verify OTP. Please try again.", false);
+                    debugLog("AJAX error: " + error + "\nResponse: " + xhr.responseText, true);
+                }
+            });
+        }
+        
+        // Show alert message
+        function showAlert(message, isSuccess) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.style.display = 'block';
+            
+            if (isSuccess) {
+                alert.classList.add('success');
+            } else {
+                alert.classList.remove('success');
+            }
+            
+            // Hide alert after 5 seconds
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Start over function
+        function startOver() {
+            // Reset all fields
+            document.getElementById('mobile').value = '';
+            document.getElementById('otpMobile').value = '';
+            document.getElementById('fullOtp').value = '';
+            const otpInputs = document.querySelectorAll('.otp-input');
+            otpInputs.forEach(input => {
+                input.value = '';
+            });
+            
+            // Reset display
+            document.getElementById('completeStep').style.display = 'none';
+            document.getElementById('otpStep').style.display = 'none';
+            document.getElementById('phoneStep').style.display = 'block';
+            
+            // Clear any existing alerts
+            document.getElementById('alert').style.display = 'none';
+            
+            debugLog("Form reset to initial state");
+        }
+    </script>
+</body>
+</html>
