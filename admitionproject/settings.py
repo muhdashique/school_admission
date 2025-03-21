@@ -69,6 +69,17 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+
+import os
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = "/static/"
+
+# Ensure this folder exists
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),  # Ensure BASE_DIR is properly set
+]
+
 # Localization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'

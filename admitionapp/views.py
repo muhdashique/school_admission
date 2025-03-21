@@ -6,6 +6,8 @@ from .otp_service import send_otp, verify_otp
 import logging
 import json
 import re
+from django.contrib.auth.decorators import login_required  # Import this
+
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -14,11 +16,43 @@ def index(request):
     return render(request, 'index.html')
 
 def login(request):
-    return render(request, 'login.html')  # Using the more robust login.html
+    """Simulated login view - stores the mobile number in session"""
+    if request.method == 'POST':
+        mobile = request.POST.get('mobile')
+        user = Student.objects.filter(mobile=mobile).first()  # Check if student exists
 
+        if user:
+            request.session['registered_number'] = mobile  # Save mobile number in session
+            return redirect('forms')  # Redirect to form page
+        else:
+            return render(request, 'login.html', {'error': 'Invalid mobile number'})
+
+    return render(request, 'login.html')
+from django.shortcuts import render, redirect
+from .models import Student
+from .forms import StudentForm, ParentForm
 
 def forms(request):
-    return render(request, 'form.html')
+    # Get registered number from session (user's mobile number after login)
+    registered_number = request.session.get('registered_number', None)
+    
+    students = None
+    if registered_number:
+        # Filter students by registered number
+        students = Student.objects.filter(mobile=registered_number)
+    
+    student_form = StudentForm()
+    parent_form = ParentForm()
+    
+    return render(request, 'form.html', {
+        'student_form': student_form,
+        'parent_form': parent_form,
+        'students': students,
+        'registered_number': registered_number,  # Pass mobile number to template
+        'title': 'Student Admission Form'
+    })
+
+
 
 def request_otp(request):
     """Handle OTP request"""
@@ -81,8 +115,11 @@ def verify_otp_view(request):
                 user.is_verified = True
                 user.save()
                 
+                # Save mobile to session
+                request.session['registered_number'] = mobile
+                
                 logger.info(f"User {'created' if created else 'updated'} after OTP verification: {mobile}")
-                # Redirect to forms page instead of dashboard
+                # Redirect to forms page
                 return JsonResponse({'status': 'Verified', 'redirect_url': '/forms/'})
             except Exception as e:
                 logger.error(f"Error updating user after OTP verification: {str(e)}", exc_info=True)
@@ -92,3 +129,190 @@ def verify_otp_view(request):
             return JsonResponse({'status': 'failed', 'error': 'Invalid OTP'})
 
     return JsonResponse({'status': 'failed', 'error': 'Invalid Request'})
+
+
+
+
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Student, Parent
+from .forms import StudentForm, ParentForm
+import logging
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
+def admission_form(request):
+    registered_number = request.session.get('registered_number', None)
+    
+    if not registered_number:
+        messages.error(request, "Please log in first.")
+        return redirect('login')
+    
+    # Get or create user based on registered_number
+    user, created = User.objects.get_or_create(mobile=registered_number)
+    
+    if request.method == 'POST':
+        student_form = StudentForm(request.POST, request.FILES)
+        parent_form = ParentForm(request.POST, request.FILES)
+        
+        logger.info("Processing form submission")
+        
+        # Print detailed validation errors
+        if not student_form.is_valid():
+            for field, errors in student_form.errors.items():
+                for error in errors:
+                    logger.error(f"Student form error in field '{field}': {error}")
+                    # Also add as a message for the user
+                    messages.error(request, f"Error in {field}: {error}")
+        
+        if not parent_form.is_valid():
+            for field, errors in parent_form.errors.items():
+                for error in errors:
+                    logger.error(f"Parent form error in field '{field}': {error}")
+                    # Also add as a message for the user
+                    messages.error(request, f"Error in {field}: {error}")
+        
+        if student_form.is_valid() and parent_form.is_valid():
+            try:
+                # Save student with the registered mobile number
+                student = student_form.save(commit=False)
+                student.mobile = registered_number  # Set from session
+                student.user = user  # Link to user account
+                student.save()
+                
+                logger.info(f"Student saved: {student.name}")
+                
+                # Then create parent with reference to student
+                parent = parent_form.save(commit=False)
+                parent.student = student
+                parent.save()
+                logger.info(f"Parent saved for student: {student.name}")
+                
+                # Add success message
+                messages.success(request, "Student and parent information saved successfully!")
+                
+                # Redirect to the form page to show updated list
+                return redirect('forms')
+            
+            except Exception as e:
+                logger.error(f"Error saving form: {str(e)}", exc_info=True)
+                messages.error(request, f"Error saving data: {str(e)}")
+        else:
+            # Add error message
+            messages.error(request, "Please correct the errors below.")
+    else:
+        # Create empty forms for GET request
+        student_form = StudentForm()
+        parent_form = ParentForm()
+    
+    # Get students associated with this number
+    students = Student.objects.filter(mobile=registered_number)
+    
+    # Render the form template with forms
+    return render(request, 'form.html', {
+        'student_form': student_form, 
+        'parent_form': parent_form,
+        'students': students,
+        'registered_number': registered_number,
+        'title': 'Student Admission Form'
+    })
+@login_required
+def admin_panel(request):
+    # Get all students with related parent data (prefetch_related for optimization)
+    students = Student.objects.select_related('parent').all()
+    
+    return render(request, 'adminpanel.html', {
+        'students': students,
+        'title': 'Student Records'
+    })
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Student, Parent
+from .forms import StudentForm, ParentForm
+from django.contrib import messages
+
+
+
+def edit_student(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    parent = get_object_or_404(Parent, student=student)
+
+    if request.method == 'POST':
+        student_form = StudentForm(request.POST, request.FILES, instance=student)
+        parent_form = ParentForm(request.POST, request.FILES, instance=parent)
+
+        if student_form.is_valid() and parent_form.is_valid():
+            student_form.save()
+            parent_form.save()
+            messages.success(request, "Student details updated successfully!")
+            return redirect('admin_panel')
+
+    else:
+        student_form = StudentForm(instance=student)
+        parent_form = ParentForm(instance=parent)
+
+    return render(request, 'edit_student.html', {'student_form': student_form, 'parent_form': parent_form})
+
+from django.shortcuts import redirect, get_object_or_404
+from .models import Student
+from django.contrib import messages
+
+def delete_student(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    student.delete()
+    messages.success(request, "Student record deleted successfully!")
+    return redirect('admin_panel')
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Student
+from .forms import StudentForm
+
+def edit_registered_student(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    if request.method == "POST":
+        form = StudentForm(request.POST, instance=student)
+        if form.is_valid():
+            form.save()
+            return redirect('admission_form')  # Redirect after saving
+    else:
+        form = StudentForm(instance=student)
+    
+    return render(request, 'edit_user.html', {'form': form})
+
+
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from .models import Student
+
+def student_delete(request, student_id):
+    try:
+        student = Student.objects.get(id=student_id)
+        student.delete()
+        messages.success(request, "Student deleted successfully!")
+    except Student.DoesNotExist:
+        messages.error(request, "Student not found!")
+    
+    return redirect('student_list')  # Change this to the correct list page name
+
+
+
+
+
+
+
+
+from django.contrib.auth import logout
+
+def admin_logout(request):
+    logout(request)
+    messages.success(request, "You have been logged out.")
+    return redirect("admin_login")

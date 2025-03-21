@@ -1,0 +1,12 @@
+
+
+<div class="container">
+    <h2>Edit Registered Student</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a href="{% url 'admission_form' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
