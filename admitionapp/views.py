@@ -1,13 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from .models import User
-from .forms import MobileNumberForm
+from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
+from .models import User, Student, Parent, SchoolInfo
+from .forms import MobileNumberForm, StudentForm, ParentForm, SchoolInfoForm
 from .otp_service import send_otp, verify_otp
 import logging
 import json
 import re
-from django.contrib.auth.decorators import login_required  # Import this
-
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -15,7 +16,7 @@ logger = logging.getLogger(__name__)
 def index(request):
     return render(request, 'index.html')
 
-def login(request):
+def mobile_login(request):
     """Simulated login view - stores the mobile number in session"""
     if request.method == 'POST':
         mobile = request.POST.get('mobile')
@@ -28,9 +29,6 @@ def login(request):
             return render(request, 'login.html', {'error': 'Invalid mobile number'})
 
     return render(request, 'login.html')
-from django.shortcuts import render, redirect
-from .models import Student
-from .forms import StudentForm, ParentForm
 
 def forms(request):
     # Get registered number from session (user's mobile number after login)
@@ -44,15 +42,17 @@ def forms(request):
     student_form = StudentForm()
     parent_form = ParentForm()
     
+    # Get school information
+    school = SchoolInfo.objects.first()
+    
     return render(request, 'form.html', {
         'student_form': student_form,
         'parent_form': parent_form,
         'students': students,
-        'registered_number': registered_number,  # Pass mobile number to template
-        'title': 'Student Admission Form'
+        'registered_number': registered_number,
+        'title': 'Student Admission Form',
+        'school': school
     })
-
-
 
 def request_otp(request):
     """Handle OTP request"""
@@ -130,21 +130,6 @@ def verify_otp_view(request):
 
     return JsonResponse({'status': 'failed', 'error': 'Invalid Request'})
 
-
-
-
-
-
-
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .models import Student, Parent
-from .forms import StudentForm, ParentForm
-import logging
-
-# Configure logging
-logger = logging.getLogger(__name__)
-
 def admission_form(request):
     registered_number = request.session.get('registered_number', None)
     
@@ -154,6 +139,9 @@ def admission_form(request):
     
     # Get or create user based on registered_number
     user, created = User.objects.get_or_create(mobile=registered_number)
+    
+    # Get school information
+    school = SchoolInfo.objects.first()
     
     if request.method == 'POST':
         student_form = StudentForm(request.POST, request.FILES)
@@ -212,36 +200,36 @@ def admission_form(request):
     # Get students associated with this number
     students = Student.objects.filter(mobile=registered_number)
     
-    # Render the form template with forms
+    # Render the form template with forms and school info
     return render(request, 'form.html', {
         'student_form': student_form, 
         'parent_form': parent_form,
         'students': students,
         'registered_number': registered_number,
-        'title': 'Student Admission Form'
+        'title': 'Student Admission Form',
+        'school': school
     })
+
 @login_required
 def admin_panel(request):
     # Get all students with related parent data (prefetch_related for optimization)
     students = Student.objects.select_related('parent').all()
     
+    # Get school information
+    school = SchoolInfo.objects.first()
+    
     return render(request, 'adminpanel.html', {
         'students': students,
-        'title': 'Student Records'
+        'title': 'Student Records',
+        'school': school
     })
-
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Student, Parent
-from .forms import StudentForm, ParentForm
-from django.contrib import messages
-
-
 
 def edit_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     parent = get_object_or_404(Parent, student=student)
+    
+    # Get school information
+    school = SchoolInfo.objects.first()
 
     if request.method == 'POST':
         student_form = StudentForm(request.POST, request.FILES, instance=student)
@@ -257,11 +245,11 @@ def edit_student(request, student_id):
         student_form = StudentForm(instance=student)
         parent_form = ParentForm(instance=parent)
 
-    return render(request, 'edit_student.html', {'student_form': student_form, 'parent_form': parent_form})
-
-from django.shortcuts import redirect, get_object_or_404
-from .models import Student
-from django.contrib import messages
+    return render(request, 'edit_student.html', {
+        'student_form': student_form, 
+        'parent_form': parent_form,
+        'school': school
+    })
 
 def delete_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
@@ -269,14 +257,12 @@ def delete_student(request, student_id):
     messages.success(request, "Student record deleted successfully!")
     return redirect('admin_panel')
 
-
-
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Student
-from .forms import StudentForm
-
 def edit_registered_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
+    
+    # Get school information
+    school = SchoolInfo.objects.first()
+    
     if request.method == "POST":
         form = StudentForm(request.POST, instance=student)
         if form.is_valid():
@@ -285,13 +271,10 @@ def edit_registered_student(request, student_id):
     else:
         form = StudentForm(instance=student)
     
-    return render(request, 'edit_user.html', {'form': form})
-
-
-
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
-from .models import Student
+    return render(request, 'edit_user.html', {
+        'form': form,
+        'school': school
+    })
 
 def student_delete(request, student_id):
     try:
@@ -303,16 +286,47 @@ def student_delete(request, student_id):
     
     return redirect('student_list')  # Change this to the correct list page name
 
-
-
-
-
-
-
-
-from django.contrib.auth import logout
+def admin_login(request):
+    """Handle admin login authentication"""
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        # Authenticate user
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            # Check if user is staff/admin
+            if user.is_staff or user.is_superuser:
+                # Log the user in using the imported auth_login
+                auth_login(request, user)
+                messages.success(request, "Login successful!")
+                return redirect('admin_panel')
+            else:
+                messages.error(request, "Access denied. Admin privileges required.")
+        else:
+            messages.error(request, "Invalid username or password.")
+    
+    return render(request, 'admin_login.html')
 
 def admin_logout(request):
     logout(request)
     messages.success(request, "You have been logged out.")
-    return redirect("admin_login")
+    return redirect("index")
+
+def school_header(request):
+    school = SchoolInfo.objects.first()  # Fetch the first entry
+    return render(request, 'form.html', {'school': school})
+
+def add_school_info(request):
+    school = SchoolInfo.objects.first()  # Get the first entry if exists
+    if request.method == "POST":
+        form = SchoolInfoForm(request.POST, request.FILES, instance=school)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "School information updated successfully!")
+            return redirect('admin_panel')  # Changed from 'admin_panel' to 'forms'
+    else:
+        form = SchoolInfoForm(instance=school)
+
+    return render(request, 'add_school_info.html', {'form': form})

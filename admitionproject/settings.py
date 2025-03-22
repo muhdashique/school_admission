@@ -74,6 +74,7 @@ import os
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = "/static/"
+LOGIN_URL = '/admin-login/'  # Change to your actual login URL
 
 # Ensure this folder exists
 STATICFILES_DIRS = [

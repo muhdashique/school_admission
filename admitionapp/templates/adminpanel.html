@@ -37,9 +37,60 @@
 </head>
 <body>
     <h2>Welcome to Admin Panel</h2>
-    <p>Hello, {{ request.user.username }}!</p>
+    <p>Hello, {{ request.user.username }}</p>
+<div>
+    <a href="{% url 'add_school_info' %}" class="custom-btn">Add/Edit School Info</a>
 
-    <a href="{% url 'admin_logout' %}">Logout</a> <!-- Add logout functionality -->
+    <style>
+        .custom-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    
+        .custom-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #1e2e3b);
+            transform: translateY(-3px);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+    <div>
+        <a href="{% url 'admin_logout' %}" class="logout-btn">Logout</a>
+
+<style>
+    .logout-btn {
+        display: inline-block;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: 0.3s ease-in-out;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        border: none;
+        margin-bottom: 2opx;
+        margin-top: 30px;
+    }
+
+    .logout-btn:hover {
+        background: linear-gradient(135deg, #c0392b, #a93226);
+        transform: translateY(-3px);
+        box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+    }
+</style>
+
+    </div>
+
+</div>
     <div class="container">
         <h2 class="text-center mb-4">Student Records</h2>
         <div class="table-responsive">

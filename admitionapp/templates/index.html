@@ -53,29 +53,34 @@
 </head>
 <body>
     <div>
+<!-- Add this to your index.html or any other page where you want the admin login link -->
+<div class="admin-link-container">
+    <a href="{% url 'admin_login' %}" class="admin-link">Admin Login</a>
+</div>
 
 <style>
-    .button {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: white;
+    .admin-link-container {
         text-align: center;
-        text-decoration: none;
-        border-radius: 5px;
-        font-size: 16px;
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        margin-bottom: 270px;
-        margin-left: 1200px;
+        margin: 20px 0;
     }
-
-    .button:hover {
-        background-color: #0056b3;
+    
+    .admin-link {
+        display: inline-block;
+        padding: 8px 15px;
+        background-color: #343a40;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: background-color 0.3s;
+    }
+    
+    .admin-link:hover {
+        background-color: #23272b;
+        text-decoration: none;
+        color: white;
     }
 </style>
-
     </div>
     <img src="https://png.pngtree.com/png-vector/20230306/ourmid/pngtree-scool-college-logo-victor-vector-png-image_6634445.png" alt="Logo" class="logo">
     <div class="year-text">Academic Year 2025-26</div>

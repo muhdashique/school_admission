@@ -395,77 +395,81 @@ function startCountdown() {
         
         // Verify OTP function
         function verifyOTP() {
-            const inputs = document.querySelectorAll('.otp-input');
-            let enteredOTP = '';
+    const inputs = document.querySelectorAll('.otp-input');
+    let enteredOTP = '';
+    
+    inputs.forEach(input => {
+        enteredOTP += input.value;
+    });
+    
+    if (enteredOTP.length !== 6) {
+        showAlert("Please enter a valid 6-digit OTP", false);
+        debugLog("Invalid OTP length: " + enteredOTP.length, true);
+        return;
+    }
+    
+    // Set the full OTP value
+    document.getElementById('fullOtp').value = enteredOTP;
+    const mobileNumber = document.getElementById('otpMobile').value;
+    
+    // Disable button while processing
+    document.getElementById('verifyOtpBtn').disabled = true;
+    debugLog("Verifying OTP: " + enteredOTP + " for mobile: " + mobileNumber);
+    
+    // Send AJAX request to Django backend
+    $.ajax({
+        url: '/verify_otp_view/',  // Make sure this matches your URL pattern
+        type: 'POST',
+        data: {
+            'mobile': mobileNumber,
+            'otp': enteredOTP,
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()  // Include CSRF token
+        },
+        success: function(response) {
+            debugLog("OTP verification response received: " + JSON.stringify(response));
+            // Enable button
+            document.getElementById('verifyOtpBtn').disabled = false;
             
-            inputs.forEach(input => {
-                enteredOTP += input.value;
-            });
-            
-            if (enteredOTP.length !== 6) {
-                showAlert("Please enter a valid 6-digit OTP", false);
-                debugLog("Invalid OTP length: " + enteredOTP.length, true);
-                return;
-            }
-            
-            // Set the full OTP value
-            document.getElementById('fullOtp').value = enteredOTP;
-            const mobileNumber = document.getElementById('otpMobile').value;
-            
-            // Disable button while processing
-            document.getElementById('verifyOtpBtn').disabled = true;
-            debugLog("Verifying OTP: " + enteredOTP + " for mobile: " + mobileNumber);
-            
-            // Send AJAX request to Django backend
-            $.ajax({
-                url: '/verify_otp/',
-                type: 'POST',
-                data: {
-                    'mobile': mobileNumber,
-                    'otp': enteredOTP
-                },
-                success: function(response) {
-                    debugLog("OTP verification response received: " + JSON.stringify(response));
-                    // Enable button
-                    document.getElementById('verifyOtpBtn').disabled = false;
-                    
-                    if (response.status === 'Verified') {
-                        // Clear timer if exists
-                        if (countdownTimer) {
-                            clearInterval(countdownTimer);
-                        }
-                        
-                        // Show completion step
-                        document.getElementById('otpStep').style.display = 'none';
-                        document.getElementById('completeStep').style.display = 'block';
-                        
-                        // Show success message
-                        showAlert("Registration successful!", true);
-                        
-                        // Redirect if a URL is provided
-                        if (response.redirect_url) {
-                            debugLog("Redirecting to: " + response.redirect_url);
-                            setTimeout(() => {
-                                window.location.href = response.redirect_url;
-                            }, 2000);
-                        }
-                    } else {
-                        // Show error message
-                        showAlert(response.error || "Failed to verify OTP. Please try again.", false);
-                        debugLog("OTP verification failed: " + (response.error || "Unknown error"), true);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    // Enable button
-                    document.getElementById('verifyOtpBtn').disabled = false;
-                    
-                    // Show error message
-                    showAlert("Failed to verify OTP. Please try again.", false);
-                    debugLog("AJAX error: " + error + "\nResponse: " + xhr.responseText, true);
+            if (response.status === 'Verified') {
+                // Clear timer if exists
+                if (countdownTimer) {
+                    clearInterval(countdownTimer);
                 }
-            });
+                
+                // Show completion step
+                document.getElementById('otpStep').style.display = 'none';
+                document.getElementById('completeStep').style.display = 'block';
+                
+                // Show success message
+                showAlert("Registration successful!", true);
+                
+                // Redirect if a URL is provided
+                if (response.redirect_url) {
+                    debugLog("Redirecting to: " + response.redirect_url);
+                    setTimeout(() => {
+                        window.location.href = response.redirect_url;
+                    }, 2000);
+                }
+            } else {
+                // Show error message
+                showAlert(response.error || "Failed to verify OTP. Please try again.", false);
+                debugLog("OTP verification failed: " + (response.error || "Unknown error"), true);
+            }
+        },
+        error: function(xhr, status, error) {
+            // Enable button
+            document.getElementById('verifyOtpBtn').disabled = false;
+            
+            // Log the actual error response
+            console.error("AJAX Error:", error);
+            console.error("Response Text:", xhr.responseText);
+            
+            // Show error message
+            showAlert("Failed to verify OTP. Please try again.", false);
+            debugLog("AJAX error: " + error + "\nResponse: " + xhr.responseText, true);
         }
-        
+    });
+}
         // Show alert message
         function showAlert(message, isSuccess) {
             const alert = document.getElementById('alert');
