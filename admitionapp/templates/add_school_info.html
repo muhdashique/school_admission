@@ -75,6 +75,25 @@
             <button type="submit">Save</button>
         </form>
     </div>
-
+    <script>
+        // Check if user is still logged in when coming back to this page via browser back button
+        document.addEventListener('DOMContentLoaded', function() {
+            // This function runs when page loads from cache (e.g., when using back button)
+            window.addEventListener('pageshow', function(event) {
+                // Check if page is loaded from cache
+                if (event.persisted) {
+                    // Make a quick AJAX request to check auth status
+                    fetch('/check-auth/', { credentials: 'same-origin' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.authenticated) {
+                                // Redirect to login page if not authenticated
+                                window.location.href = "{% url 'admin_login' %}";
+                            }
+                        });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

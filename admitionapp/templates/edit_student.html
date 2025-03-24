@@ -5,9 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Student</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f3f4f6, #dbeafe); /* Light gradient background */
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 50px;
+        }
+
+        h2 {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 18px;
+            color: #34495e;
+            margin-top: 20px;
+            border-bottom: 2px solid #2980b9;
+            padding-bottom: 5px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        input, select, textarea {
+            border-radius: 8px !important;
+            padding: 10px !important;
+            border: 1px solid #bdc3c7 !important;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border: none;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: 0.3s ease-in-out;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            transform: translateY(-2px);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+            border: none;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: 0.3s ease-in-out;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            transform: translateY(-2px);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-4">
+    <div class="container">
         <h2 class="text-center">Edit Student Details</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -15,9 +91,31 @@
             {{ student_form.as_p }}
             <h3>Parent Information</h3>
             {{ parent_form.as_p }}
-            <button type="submit" class="btn btn-success">Update</button>
-            <a href="{% url 'admin_panel' %}" class="btn btn-secondary">Cancel</a>
+            <div class="btn-container">
+                <button type="submit" class="btn btn-success">Update</button>
+                <a href="{% url 'admin_panel' %}" class="btn btn-secondary">Cancel</a>
+            </div>
         </form>
     </div>
+    <script>
+        // Check if user is still logged in when coming back to this page via browser back button
+        document.addEventListener('DOMContentLoaded', function() {
+            // This function runs when page loads from cache (e.g., when using back button)
+            window.addEventListener('pageshow', function(event) {
+                // Check if page is loaded from cache
+                if (event.persisted) {
+                    // Make a quick AJAX request to check auth status
+                    fetch('/check-auth/', { credentials: 'same-origin' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.authenticated) {
+                                // Redirect to login page if not authenticated
+                                window.location.href = "{% url 'admin_login' %}";
+                            }
+                        });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,24 +1,22 @@
 from django.db import models
 
 class User(models.Model):
-    # Change this line in models.py
-    mobile = models.CharField(max_length=10)  # Remove 'unique=True'
+    mobile = models.CharField(max_length=10)  # Without unique=True
     is_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.mobile
 
-
-
-
-
-
-from django.db import models
+class Standard(models.Model):
+    name = models.CharField(max_length=20)
+    value = models.IntegerField(null=True, blank=True) 
+    def __str__(self):
+        return self.name
 
 class Student(models.Model):
-    # Add this to Student model
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='students', null=True)
-    standard = models.CharField(max_length=20)
+    # Change this line to make it a ForeignKey
+    standard = models.ForeignKey(Standard, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     dob = models.DateField()
     age = models.CharField(max_length=20, blank=True)  # Auto-calculated
@@ -91,15 +89,6 @@ class Parent(models.Model):
     def __str__(self):
         return f"{self.student.name}'s Parents"
 
-
-
-
-
-
-
-
-from django.db import models
-
 class SchoolInfo(models.Model):
     name = models.CharField(max_length=255)
     affiliation = models.CharField(max_length=255)
@@ -107,10 +96,7 @@ class SchoolInfo(models.Model):
     address = models.TextField()
     phone_numbers = models.TextField(help_text="Separate multiple numbers with commas")
     logo = models.ImageField(upload_to='school_logos/', blank=True, null=True)
+    academic_year = models.CharField(max_length=20, help_text="e.g., 2024-2025")
 
     def __str__(self):
         return self.name
-
-
-
-

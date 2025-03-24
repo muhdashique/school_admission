@@ -14,7 +14,9 @@ import re
 logger = logging.getLogger(__name__)
 
 def index(request):
-    return render(request, 'index.html')
+    # Get school information
+    school = SchoolInfo.objects.first()
+    return render(request, 'index.html', {'school': school})
 
 def mobile_login(request):
     """Simulated login view - stores the mobile number in session"""
@@ -39,7 +41,7 @@ def forms(request):
         # Filter students by registered number
         students = Student.objects.filter(mobile=registered_number)
     
-    student_form = StudentForm()
+    student_form = StudentForm(initial={'mobile': registered_number})
     parent_form = ParentForm()
     
     # Get school information
@@ -194,9 +196,11 @@ def admission_form(request):
             messages.error(request, "Please correct the errors below.")
     else:
         # Create empty forms for GET request
-        student_form = StudentForm()
+        student_form = StudentForm(initial={'mobile': registered_number})
         parent_form = ParentForm()
     
+
+        student_form.fields['mobile'].widget.attrs['readonly'] = True
     # Get students associated with this number
     students = Student.objects.filter(mobile=registered_number)
     
@@ -223,7 +227,7 @@ def admin_panel(request):
         'title': 'Student Records',
         'school': school
     })
-
+@login_required
 def edit_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     parent = get_object_or_404(Parent, student=student)
@@ -250,13 +254,13 @@ def edit_student(request, student_id):
         'parent_form': parent_form,
         'school': school
     })
-
+@login_required
 def delete_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     student.delete()
     messages.success(request, "Student record deleted successfully!")
     return redirect('admin_panel')
-
+@login_required
 def edit_registered_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     
@@ -275,7 +279,7 @@ def edit_registered_student(request, student_id):
         'form': form,
         'school': school
     })
-
+@login_required
 def student_delete(request, student_id):
     try:
         student = Student.objects.get(id=student_id)
@@ -310,14 +314,30 @@ def admin_login(request):
     return render(request, 'admin_login.html')
 
 def admin_logout(request):
+    # Clear any session data
+    request.session.flush()
+    
+    # Log the user out
     logout(request)
+    
+    # Add success message
     messages.success(request, "You have been logged out.")
-    return redirect("index")
+    
+    # Return with no-cache headers
+    response = redirect("index")
+    response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    
+    return response
 
+
+
+@login_required
 def school_header(request):
     school = SchoolInfo.objects.first()  # Fetch the first entry
     return render(request, 'form.html', {'school': school})
-
+@login_required
 def add_school_info(request):
     school = SchoolInfo.objects.first()  # Get the first entry if exists
     if request.method == "POST":
@@ -330,3 +350,75 @@ def add_school_info(request):
         form = SchoolInfoForm(instance=school)
 
     return render(request, 'add_school_info.html', {'form': form})
+
+
+from .models import Standard
+from .forms import StandardForm
+# Standard section
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_superuser)
+def add_standard(request):
+    if request.method == 'POST':
+        form = StandardForm(request.POST)
+        if form.is_valid():
+            standard = form.save(commit=False)
+
+            # If no value is provided, set a default value (e.g., 0)
+            if standard.value is None:
+                standard.value = 0
+            
+            standard.save()
+            messages.success(request, "Standard added successfully!")
+            return redirect('standard_list')
+    else:
+        form = StandardForm()
+
+    return render(request, 'add_standard.html', {'form': form})
+
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_superuser)
+def standard_list(request):
+    """View for listing all standards"""
+    standards = Standard.objects.all()
+    return render(request, 'edit_standard.html', {'standards': standards})
+
+
+# In views.py
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_superuser)
+def edit_standard(request, standard_id):
+    """View for editing standards"""
+    standard = get_object_or_404(Standard, id=standard_id)
+    
+    if request.method == 'POST':
+        form = StandardForm(request.POST, instance=standard)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Standard updated successfully!")
+            return redirect('standard_list')
+    else:
+        form = StandardForm(instance=standard)
+    
+    return render(request, 'add_standard.html', {'form': form, 'editing': True})
+
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_superuser)
+def delete_standard(request, standard_id):
+    """View for deleting standards"""
+    standard = get_object_or_404(Standard, id=standard_id)
+    standard.delete()
+    messages.success(request, "Standard deleted successfully!")
+    return redirect('standard_list')
+
+
+
+
+# middilware
+from django.http import JsonResponse
+
+def check_auth(request):
+    """Simple view to check if user is authenticated via AJAX"""
+    return JsonResponse({
+        'authenticated': request.user.is_authenticated
+    })
+# middleware

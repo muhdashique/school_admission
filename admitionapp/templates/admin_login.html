@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <style>
         /* General Reset */
         * {
@@ -98,6 +101,19 @@
             }
         }
     </style>
+    <script>
+        // Check if we're coming from a page that required authentication
+        document.addEventListener('DOMContentLoaded', function() {
+            // If coming from a protected page after logout, prevent going back
+            if (document.referrer.includes('/admin/') || 
+                document.referrer.includes('/edit_') || 
+                document.referrer.includes('/add_') || 
+                document.referrer.includes('/delete_')) {
+                // Replace current history entry with this page to prevent back button issues
+                window.history.replaceState(null, null, window.location.href);
+            }
+        });
+    </script>
 </head>
 <body>
     <div class="login-container">

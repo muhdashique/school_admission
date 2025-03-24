@@ -33,3 +33,7 @@ if SchoolInfo in admin.site._registry:
 
 admin.site.register(SchoolInfo, SchoolInfoAdmin)
 
+
+
+
+

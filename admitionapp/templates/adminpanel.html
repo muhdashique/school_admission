@@ -38,9 +38,47 @@
 <body>
     <h2>Welcome to Admin Panel</h2>
     <p>Hello, {{ request.user.username }}</p>
+    <div class="nav-item">
+        
+    </div>
 <div>
     <a href="{% url 'add_school_info' %}" class="custom-btn">Add/Edit School Info</a>
-
+    <a class="nav-link manage-standards-btn" href="{% url 'standard_list' %}">
+        <i class="fas fa-graduation-cap"></i>
+        <span>Manage Standards</span>
+    </a>
+    
+    <style>
+        .manage-standards-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between icon and text */
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #2513ca, #736dad);
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: fit-content;
+            position: absolute;
+            right: 20px; /* Aligns to the right */
+            top: 80px; /* Adjust as needed */
+        }
+    
+        .manage-standards-btn i {
+            font-size: 18px; /* Adjust icon size */
+        }
+    
+        .manage-standards-btn:hover {
+            background: linear-gradient(135deg, #1714d2, #1832c6);
+            transform: translateY(-3px);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+    
     <style>
         .custom-btn {
             display: inline-block;
@@ -64,30 +102,37 @@
     <div>
         <a href="{% url 'admin_logout' %}" class="logout-btn">Logout</a>
 
-<style>
-    .logout-btn {
-        display: inline-block;
-        padding: 12px 20px;
-        font-size: 16px;
-        font-weight: bold;
-        color: white;
-        background: linear-gradient(135deg, #e74c3c, #c0392b);
-        text-decoration: none;
-        border-radius: 8px;
-        transition: 0.3s ease-in-out;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        border: none;
-        margin-bottom: 2opx;
-        margin-top: 30px;
-    }
+        <style>
+            .logout-btn {
+                display: inline-block;
+                padding: 12px 20px;
+                font-size: 16px;
+                font-weight: bold;
+                color: white;
+                background: linear-gradient(135deg, #e74c3c, #c0392b);
+                text-decoration: none;
+                border-radius: 8px;
+                transition: 0.3s ease-in-out;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                border: none;
+                position: absolute;
+                right: 20px; /* Align to the right */
+                top: 10px; /* Adjust vertical position */
+            }
+        
+            .logout-btn:hover {
+                background: linear-gradient(135deg, #c0392b, #a93226);
+                transform: translateY(-3px);
+                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            }
+        </style>
+        
 
-    .logout-btn:hover {
-        background: linear-gradient(135deg, #c0392b, #a93226);
-        transform: translateY(-3px);
-        box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
-    }
-</style>
-
+    </div>
+    <div>
+       
+        </a>
+        
     </div>
 
 </div>
@@ -196,5 +241,25 @@
             {% endif %}
         </div>
     </div>
+    <script>
+        // Check if user is still logged in when coming back to this page via browser back button
+        document.addEventListener('DOMContentLoaded', function() {
+            // This function runs when page loads from cache (e.g., when using back button)
+            window.addEventListener('pageshow', function(event) {
+                // Check if page is loaded from cache
+                if (event.persisted) {
+                    // Make a quick AJAX request to check auth status
+                    fetch('/check-auth/', { credentials: 'same-origin' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.authenticated) {
+                                // Redirect to login page if not authenticated
+                                window.location.href = "{% url 'admin_login' %}";
+                            }
+                        });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

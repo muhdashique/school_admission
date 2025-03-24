@@ -16,4 +16,9 @@ urlpatterns = [
     path('edit-registered-student/<int:student_id>/', views.edit_registered_student, name='edit_registered_student'),
     path('student-delete/<int:student_id>/', views.student_delete, name='student_delete'),
     path('add-school-info/', views.add_school_info, name='add_school_info'),
+    path('standards/', views.standard_list, name='standard_list'),
+    path('standards/add/', views.add_standard, name='add_standard'),
+    path('standards/edit/<int:standard_id>/', views.edit_standard, name='edit_standard'),
+    path('standards/delete/<int:standard_id>/', views.delete_standard, name='delete_standard'),
+    path('check-auth/', views.check_auth, name='check_auth'),
 ]
