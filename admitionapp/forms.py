@@ -21,11 +21,11 @@ class MobileNumberForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        exclude = ['user']  # Exclude user field since it's set in the view
+        exclude = ['user'] 
         widgets = {
             'dob': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'standard': forms.Select(attrs={'class': 'form-control'}), # Changed from TextInput to Select
+            'standard': forms.Select(attrs={'class': 'form-control'}), 
             'mobile': forms.TextInput(attrs={'class': 'form-control'}),
             'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'sex': forms.Select(attrs={'class': 'form-control'}),
@@ -46,13 +46,12 @@ class StudentForm(forms.ModelForm):
         return mobile
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
-        # Dynamically load standards into the dropdown
         self.fields['mobile'].widget.attrs['readonly'] = True
 
 class ParentForm(forms.ModelForm):
     class Meta:
         model = Parent
-        exclude = ['student']  # Exclude student since it will be set in the view
+        exclude = ['student']  
         widgets = {
             'father_name': forms.TextInput(attrs={'class': 'form-control'}),
             'father_job': forms.TextInput(attrs={'class': 'form-control'}),
@@ -108,5 +107,5 @@ class StandardForm(forms.ModelForm):
         fields = ['name','value']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Standard/Class Name'}),
-            'value': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Value'})  # Add this line
+            'value': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Value'})  
         }
