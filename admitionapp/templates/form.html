@@ -645,6 +645,38 @@
 </script>
         </form>
 
+
+
+
+
+        <div class="container mt-3">
+            <div class="row mb-3">
+                <div class="col-12">
+                    <form action="{% url 'forms' %}" method="GET" class="d-flex">
+                        <input class="form-control me-2" type="search" 
+                               placeholder="Search by Name or Standard" 
+                               aria-label="Search" 
+                               name="query" 
+                               value="{{ search_query }}">
+                        <button class="btn btn-outline-primary" type="submit">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            {% if search_query %}
+            <div class="alert alert-info d-flex justify-content-between align-items-center">
+                <span>
+                    Search results for: <strong>"{{ search_query }}"</strong>
+                    ({{ students.count }} result{{ students.count|pluralize }})
+                </span>
+                <a href="{% url 'forms' %}" class="btn btn-sm btn-secondary">
+                    <i class="fas fa-times-circle"></i> Clear Search
+                </a>
+            </div>
+            {% endif %}
+        </div>
         <!-- Display registered students section -->
         <div class="container">
             <!-- Display logged in number -->
@@ -671,6 +703,7 @@
                             <th>Address</th>
                             <th>Nationality</th>
                             <th>Mobile</th>
+                            <th>Aadhar Number</th>
                             <th>Mother Tongue</th>
                             <th>Religion</th>
                             <th>Caste</th>
@@ -712,6 +745,7 @@
                             <td>{{ student.address }}</td>
                             <td>{{ student.nationality }}</td>
                             <td>{{ student.mobile }}</td>
+                            <td>{{ student.aadhar_number }}</td>
                             <td>{{ student.mother_tongue }}</td>
                             <td>{{ student.religion }}</td>
                             <td>{{ student.caste }}</td>

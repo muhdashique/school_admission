@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import User, Student, Parent, SchoolInfo, Standard
 from .forms import MobileNumberForm, StudentForm, ParentForm, SchoolInfoForm, StandardForm
 from .otp_service import send_otp, verify_otp
+from django.db.models import Q
 import logging
 import json
 import re
@@ -43,23 +44,32 @@ def mobile_login(request):
 def forms(request):
     registered_number = request.session.get('registered_number', None)
     
-    students = None
-    if registered_number:
-       
-        students = Student.objects.filter(mobile=registered_number)
+    # Get the search query from the request
+    search_query = request.GET.get('query', '').strip()
+    
+    # Base queryset for students
+    students = Student.objects.filter(mobile=registered_number)
+    
+    # If there's a search query, filter the students
+    if search_query:
+        students = students.filter(
+            Q(name__icontains=search_query) |  # Search by name
+            Q(standard__name__icontains=search_query)  # Search by standard
+        )
     
     student_form = StudentForm(initial={'mobile': registered_number})
     parent_form = ParentForm()
     school = SchoolInfo.objects.first()
+    
     return render(request, 'form.html', {
         'student_form': student_form,
         'parent_form': parent_form,
         'students': students,
         'registered_number': registered_number,
         'title': 'Student Admission Form',
-        'school': school
+        'school': school,
+        'search_query': search_query
     })
-
 
 
 
@@ -384,6 +394,10 @@ def admin_logout(request):
 def school_header(request):
     school = SchoolInfo.objects.first()  
     return render(request, 'form.html', {'school': school})
+
+
+
+
 @login_required
 def add_school_info(request):
     school = SchoolInfo.objects.first() 
@@ -487,3 +501,33 @@ def check_auth(request):
         'authenticated': request.user.is_authenticated
     })
 # middleware
+
+
+
+
+# search bar on admin panel
+
+@login_required
+def search_students(request):
+    """View to search students based on mobile, name, or standard"""
+    query = request.GET.get('query', '').strip()
+    
+    # Base queryset with select_related for parent to reduce database queries
+    students = Student.objects.select_related('parent')
+    
+    if query:
+        # Search across multiple fields
+        students = students.filter(
+            Q(mobile__icontains=query) |  # Search by mobile
+            Q(name__icontains=query) |    # Search by name
+            Q(standard__name__icontains=query)  # Search by standard
+        )
+    
+    school = SchoolInfo.objects.first()
+    
+    return render(request, 'adminpanel.html', {
+        'students': students,
+        'title': 'Student Search Results',
+        'school': school,
+        'search_query': query
+    })
