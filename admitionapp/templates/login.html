@@ -7,14 +7,22 @@
     <!-- Include jQuery for AJAX requests -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+       body {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-image: url('https://media.istockphoto.com/id/1268727652/photo/background-khaki-green-olive-grunge-texture-vignette-matte-dirty-pattern-minimalism.jpg?s=612x612&w=0&k=20&c=k4Qvd4fxXZlb8wSl9TfhB78dwr5qQIkK1dFjSlqBrEc='); /* Change this to your image path */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             margin: 0;
+            padding: 0;
+            
         }
         .container {
             background-color: white;
@@ -290,51 +298,62 @@
         // Request OTP function
         // Request OTP function
         function requestOTP() {
-    // Log to verify function execution
-    console.log("requestOTP function called at " + new Date().toLocaleTimeString());
-    
-    const mobileNumber = $("#mobile").val();
-    
-    $.ajax({
-        url: '/request-otp/',
-        type: 'POST',
-        data: {
-            'mobile': mobileNumber,
-            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-        },
-        success: function(response) {
-            console.log("OTP AJAX Response:", response);
+            console.log("requestOTP function called at " + new Date().toLocaleTimeString());
             
-            if (response.status === 'success') {
-                // Force direct DOM manipulation with !important styles
-                document.getElementById('phoneStep').style.cssText = "display: none !important";
-                document.getElementById('otpStep').style.cssText = "display: block !important";
-                
-                // Clear any previous OTP inputs
-                $(".otp-input").val("");
-                
-                // Focus on first OTP input
-                if ($(".otp-input").length > 0) {
-                    setTimeout(function() {
-                        $(".otp-input")[0].focus();
-                    }, 200);
-                }
-                
-                // Start countdown
-                startCountdown();
-                
-                // Show a success message
-                $("#otpMessage").html("<div class='alert alert-success'>OTP sent successfully!</div>");
-            } else {
-                $("#otpMessage").html("<div class='alert alert-danger'>" + response.message + "</div>");
+            const mobileNumber = $("#mobile").val();
+            
+            // Validate mobile number
+            if (!mobileNumber || mobileNumber.length !== 10 || isNaN(mobileNumber)) {
+                showAlert("Please enter a valid 10-digit mobile number", false);
+                return;
             }
-        },
-        error: function(xhr, status, error) {
-            console.error("AJAX Error:", error);
-            $("#otpMessage").html("<div class='alert alert-danger'>Error: " + error + "</div>");
+            
+            $.ajax({
+                url: '/request-otp/',
+                type: 'POST',
+                data: {
+                    'mobile': mobileNumber,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                },
+                success: function(response) {
+                    console.log("OTP AJAX Response:", response);
+                    
+                    if (response.status === 'success') {
+                        // Automatically switch to OTP input step
+                        document.getElementById('phoneStep').style.display = 'none';
+                        document.getElementById('otpStep').style.display = 'block';
+                        
+                        // Populate the hidden mobile input
+                        document.getElementById('otpMobile').value = mobileNumber;
+                        
+                        // Clear any previous OTP inputs
+                        $(".otp-input").val("");
+                        
+                        // Focus on first OTP input
+                        setTimeout(function() {
+                            $(".otp-input")[0].focus();
+                        }, 200);
+                        
+                        // Start countdown
+                        startCountdown();
+                        
+                        // Show success message
+                        showAlert("OTP sent successfully!", true);
+                        
+                        // Debug log
+                        debugLog("OTP input step automatically displayed");
+                    } else {
+                        // Show error message if OTP request fails
+                        showAlert(response.message || "Failed to send OTP", false);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                    showAlert("Error sending OTP. Please try again.", false);
+                    debugLog("OTP request failed: " + error, true);
+                }
+            });
         }
-    });
-}
 
 // Make sure the countdown function is properly defined
 function startCountdown() {

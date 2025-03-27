@@ -7,19 +7,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
          body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 15px;
-            background-color: #efefef;
-        }
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0 auto;
+        padding: 15px;
+        background-color: #efefef;
+        background-image: url("https://img.freepik.com/free-photo/design-space-paper-textured-background_53876-71492.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        
+    }
         .container {
             max-width: 100%;
             width: 100%;
             padding: 0 15px;
+        
         }
         .form-section {
-            background-color: #f6f2f2;
+            background:transparent ;
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
@@ -56,7 +62,7 @@
             text-align: center;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #000;
+            border-bottom: 2px solid #ffffff;
         }
         .logo {
             width: 100px;
@@ -68,6 +74,7 @@
         .school-info {
             text-align: center;
             flex-grow: 1;
+            color: white;
         }
         .school-name {
             font-size: 24px;
@@ -101,6 +108,7 @@
             font-weight: bold;
             font-size: 18px;
             margin-bottom: 20px;
+            color: white;
         }
         table {
             width: 100%;
@@ -127,6 +135,7 @@
             text-align: justify;
             max-width: 800px;
             margin: 0 auto;
+            color: white;
         }
         .signature-line {
             display: flex;
@@ -161,7 +170,6 @@
         .terms-box {
             max-height: 150px;
             overflow-y: auto;
-            border: 1px solid #ddd;
             padding: 10px;
             margin-bottom: 15px;
         }
@@ -212,15 +220,31 @@
         }
         
     </style>
+    <!-- Add this CSS in the <style> section to improve select appearance -->
+        <style>
+            /* Style for select dropdown placeholder */
+            select option[value=""] {
+                color: #6c757d; /* Gray color for placeholder */
+            }
+            select option:not([value=""]) {
+                color: #000; /* Black color for other options */
+            }
+            select:invalid {
+                color: #6c757d; /* Gray color when no selection is made */
+            }
+            select:valid {
+                color: #000; /* Black color when a selection is made */
+            }
+        </style>
 </head>
 <body>
     <div class="container py-5">
         <!-- Text center for messages -->
         <div class="text-center mb-4">
-            <h1>Student Admission Form</h1>
+            <h1 style="color: white;">Student Admission Form</h1>
             <div class="text-center" style="margin-bottom: 70px;">
                 {% if registered_number %}
-                <h2>Welcome, {{ registered_number }}</h2>
+                <h2 style="color: white;">Welcome, {{ registered_number }}</h2>
                 {% endif %}
             </div>
         </div>
@@ -255,7 +279,7 @@
                 <div class="row g-3">
                     <!-- Name field -->
                     <div class="col-md-6">
-                        <label for="{{ student_form.name.id_for_label }}" class="form-label required-field">Full Name</label>
+                        <label for="{{ student_form.name.id_for_label }}" class="form-label required-field" style="color: white;">Full Name</label>
                         {{ student_form.name }}
                         {% if student_form.name.errors %}
                             <div class="errorlist">
@@ -278,7 +302,7 @@
                     
                     <!-- Standard/Class field -->
                     <div class="col-md-6">
-                        <label for="{{ student_form.standard.id_for_label }}" class="form-label required-field">Class/Standard</label>
+                        <label for="{{ student_form.standard.id_for_label }}" class="form-label required-field " style="color: white;">Class/Standard</label>
                         {{ student_form.standard }}
                         {% if student_form.standard.errors %}
                             <div class="errorlist">
@@ -289,7 +313,7 @@
                     
                     <!-- Date of Birth field -->
                     <div class="col-md-4">
-                        <label for="{{ student_form.dob.id_for_label }}" class="form-label required-field">Date of Birth</label>
+                        <label for="{{ student_form.dob.id_for_label }}" class="form-label required-field" style="color: white;">Date of Birth</label>
                         {{ student_form.dob }}
                         {% if student_form.dob.errors %}
                             <div class="errorlist">
@@ -300,7 +324,7 @@
                     
                     <!-- Age field -->
                     <div class="":>
-                        <label for="{{ student_form.age.id_for_label }}" class="form-label">Age</label>
+                        <label for="{{ student_form.age.id_for_label }}" class="form-label" style="color: white;">Age</label>
                         {{ student_form.age }}
                         {% if student_form.age.errors %}
                             <div class="errorlist">
@@ -311,7 +335,7 @@
                     
                     <!-- Sex/Gender field -->
                     <div class="col-md-4">
-                        <label for="{{ student_form.sex.id_for_label }}" class="form-label required-field">Gender</label>
+                        <label for="{{ student_form.sex.id_for_label }}" class="form-label required-field" style="color: white;">Gender</label>
                         {{ student_form.sex }}
                         {% if student_form.sex.errors %}
                             <div class="errorlist">
@@ -322,7 +346,7 @@
                     
                     <!-- Mobile field -->
                     <div class="col-md-6">
-                        <label for="{{ student_form.mobile.id_for_label }}" class="form-label required-field">Mobile Number</label>
+                        <label for="{{ student_form.mobile.id_for_label }}" class="form-label required-field" style="color: white;">Mobile Number</label>
                         <input type="text" name="{{ student_form.mobile.html_name }}" value="{{ registered_number }}" 
                                id="{{ student_form.mobile.id_for_label }}" class="form-control" readonly>
                         <small class="form-text text-muted"></small>
@@ -334,7 +358,7 @@
                     </div>
                     
                     <div class="col-md-6">
-                        <label for="{{ student_form.aadhar_number.id_for_label }}" class="form-label">Aadhar Number</label>
+                        <label for="{{ student_form.aadhar_number.id_for_label }}" class="form-label" style="color: white;">Aadhar Number</label>
                         <input type="text" name="aadhar_number" id="{{ student_form.aadhar_number.id_for_label }}" 
                                class="form-control" placeholder="Enter 12-digit Aadhar number">
                         <small class="form-text text-muted">12-digit Aadhar number</small>
@@ -347,7 +371,7 @@
 
                     <!-- Blood group field -->
                     <div class="col-md-4">
-                        <label for="{{ student_form.blood_group.id_for_label }}" class="form-label">Blood Group</label>
+                        <label for="{{ student_form.blood_group.id_for_label }}" class="form-label" style="color: white;">Blood Group</label>
                         {{ student_form.blood_group }}
                         {% if student_form.blood_group.errors %}
                             <div class="errorlist">
@@ -358,7 +382,7 @@
                     
                     <!-- Address field -->
                     <div class="col-12">
-                        <label for="{{ student_form.address.id_for_label }}" class="form-label required-field">Address</label>
+                        <label for="{{ student_form.address.id_for_label }}" class="form-label required-field" style="color: white;">Permanent Address</label>
                         {{ student_form.address }}
                         {% if student_form.address.errors %}
                             <div class="errorlist">
@@ -369,7 +393,7 @@
                     
                     <!-- Nationality field -->
                     <div class="col-md-4">
-                        <label for="{{ student_form.nationality.id_for_label }}" class="form-label required-field">Nationality</label>
+                        <label for="{{ student_form.nationality.id_for_label }}" class="form-label required-field" style="color: white;">Nationality</label>
                         {{ student_form.nationality }}
                         {% if student_form.nationality.errors %}
                             <div class="errorlist">
@@ -380,7 +404,7 @@
                     
                     <!-- Mother Tongue field -->
                     <div class="col-md-4">
-                        <label for="{{ student_form.mother_tongue.id_for_label }}" class="form-label">Mother Tongue</label>
+                        <label for="{{ student_form.mother_tongue.id_for_label }}" class="form-label" style="color: white;">Mother Tongue</label>
                         {{ student_form.mother_tongue }}
                         {% if student_form.mother_tongue.errors %}
                             <div class="errorlist">
@@ -391,7 +415,7 @@
                     
                     <!-- Religion field -->
                     <div class="col-md-4">
-                        <label for="{{ student_form.religion.id_for_label }}" class="form-label">Religion</label>
+                        <label for="{{ student_form.religion.id_for_label }}" class="form-label" style="color: white;">Religion</label>
                         {{ student_form.religion }}
                         {% if student_form.religion.errors %}
                             <div class="errorlist">
@@ -402,7 +426,7 @@
                     
                     <!-- Caste field -->
                     <div class="col-md-4">
-                        <label for="{{ student_form.caste.id_for_label }}" class="form-label">Caste</label>
+                        <label for="{{ student_form.caste.id_for_label }}" class="form-label" style="color: white;">Caste</label>
                         {{ student_form.caste }}
                         {% if student_form.caste.errors %}
                             <div class="errorlist">
@@ -413,7 +437,7 @@
                     
                     <!-- Identification Mark field -->
                     <div class="col-md-8">
-                        <label for="{{ student_form.id_mark.id_for_label }}" class="form-label">Identification Mark</label>
+                        <label for="{{ student_form.id_mark.id_for_label }}" class="form-label" style="color: white;" >Identification Mark</label>
                         {{ student_form.id_mark }}
                         {% if student_form.id_mark.errors %}
                             <div class="errorlist">
@@ -424,9 +448,9 @@
                     
                     <!-- Student Photo field -->
                     <div class="col-md-12 text-center">
-                        <label for="{{ student_form.student_photo.id_for_label }}" class="form-label d-block">Student Photo</label>
+                        <label for="{{ student_form.student_photo.id_for_label }}" class="form-label d-block" style="color: white;">Student Photo</label>
                         <div class="photo-preview" id="studentPhotoPreview">
-                            <span>Photo Preview</span>
+                            <span style="color: white;">Photo Preview</span>
                         </div>
                         <div class="text-center">
                             {{ student_form.student_photo }}
@@ -442,14 +466,14 @@
             
             <!-- Parent Information Section -->
             <div class="form-section">
-                <h3 class="mb-3 text-center">Parent Information</h3>
+                <h3 class="mb-3 text-center" style="color: white;">Parent Information</h3>
                 
                 <!-- Father's Details -->
-                <h5 class="mb-3 text-center">Father's Details</h5>
+                <h5 class="mb-3 text-center" style="color: white;">Father's Details</h5>
                 <div class="row g-3">
                     <!-- Father's Name field -->
                     <div class="col-md-6">
-                        <label for="{{ parent_form.father_name.id_for_label }}" class="form-label required-field">Father's Name</label>
+                        <label for="{{ parent_form.father_name.id_for_label }}" class="form-label required-field" style="color: white;">Father's Name</label>
                         {{ parent_form.father_name }}
                         {% if parent_form.father_name.errors %}
                             <div class="errorlist">
@@ -460,7 +484,7 @@
                     
                     <!-- Father's Occupation field -->
                     <div class="col-md-6">
-                        <label for="{{ parent_form.father_job.id_for_label }}" class="form-label">Occupation</label>
+                        <label for="{{ parent_form.father_job.id_for_label }}" class="form-label" style="color: white;">Occupation</label>
                         {{ parent_form.father_job }}
                         {% if parent_form.father_job.errors %}
                             <div class="errorlist">
@@ -471,7 +495,7 @@
                     
                     <!-- Father's Mobile field -->
                     <div class="col-md-6">
-                        <label for="{{ parent_form.father_mobile.id_for_label }}" class="form-label required-field">Mobile Number</label>
+                        <label for="{{ parent_form.father_mobile.id_for_label }}" class="form-label required-field" style="color: white;">Mobile Number</label>
                         {{ parent_form.father_mobile }}
                         {% if parent_form.father_mobile.errors %}
                             <div class="errorlist">
@@ -482,7 +506,7 @@
                     
                     <!-- Father's Email field -->
                     <div class="col-md-6">
-                        <label for="{{ parent_form.father_email.id_for_label }}" class="form-label">Email</label>
+                        <label for="{{ parent_form.father_email.id_for_label }}" class="form-label" style="color: white;">Email</label>
                         {{ parent_form.father_email }}
                         {% if parent_form.father_email.errors %}
                             <div class="errorlist">
@@ -493,7 +517,7 @@
                     
                     <!-- Father's Education field -->
                     <div class="col-md-6">
-                        <label for="{{ parent_form.father_education.id_for_label }}" class="form-label">Education</label>
+                        <label for="{{ parent_form.father_education.id_for_label }}" class="form-label" style="color: white;">Education</label>
                         {{ parent_form.father_education }}
                         {% if parent_form.father_education.errors %}
                             <div class="errorlist">
@@ -504,7 +528,7 @@
                     
                     <!-- Father's Place field -->
                     <div class="col-md-6">
-                        <label for="{{ parent_form.father_place.id_for_label }}" class="form-label">Native Place</label>
+                        <label for="{{ parent_form.father_place.id_for_label }}" class="form-label" style="color: white;">Native Place</label>
                         {{ parent_form.father_place }}
                         {% if parent_form.father_place.errors %}
                             <div class="errorlist">
@@ -515,9 +539,9 @@
                     
                     <!-- Father's Photo field -->
                     <div class="col-md-12 text-center">
-                        <label for="{{ parent_form.father_photo.id_for_label }}" class="form-label d-block">Father's Photo</label>
+                        <label for="{{ parent_form.father_photo.id_for_label }}" class="form-label d-block" style="color: white;">Father's Photo</label>
                         <div class="photo-preview" id="fatherPhotoPreview">
-                            <span>Photo Preview</span>
+                            <span style="color: white;">Photo Preview</span>
                         </div>
                         <div class="text-center">
                             {{ parent_form.father_photo }}
@@ -531,11 +555,11 @@
                 </div>
                 
                 <!-- Mother's Details -->
-                <h5 class="mt-4 mb-3 text-center">Mother's Details</h5>
+                <h5 class="mt-4 mb-3 text-center" style="color: white;" >Mother's Details</h5>
                 <div class="row g-3">
                     <!-- Mother's Name field -->
                     <div class="col-md-6">
-                        <label for="{{ parent_form.mother_name.id_for_label }}" class="form-label required-field">Mother's Name</label>
+                        <label for="{{ parent_form.mother_name.id_for_label }}" class="form-label required-field" style="color: white;">Mother's Name</label>
                         {{ parent_form.mother_name }}
                         {% if parent_form.mother_name.errors %}
                             <div class="errorlist">
@@ -546,7 +570,7 @@
                     
                     <!-- Mother's Occupation field -->
                     <div class="col-md-6">
-                        <label for="{{ parent_form.mother_job.id_for_label }}" class="form-label">Occupation</label>
+                        <label for="{{ parent_form.mother_job.id_for_label }}" class="form-label" style="color: white;">Occupation</label>
                         {{ parent_form.mother_job }}
                         {% if parent_form.mother_job.errors %}
                             <div class="errorlist">
@@ -557,7 +581,7 @@
                     
                     <!-- Mother's Mobile field -->
                     <div class="col-md-6">
-                        <label for="{{ parent_form.mother_mobile.id_for_label }}" class="form-label required-field">Mobile Number</label>
+                        <label for="{{ parent_form.mother_mobile.id_for_label }}" class="form-label required-field" style="color: white;">Mobile Number</label>
                         {{ parent_form.mother_mobile }}
                         {% if parent_form.mother_mobile.errors %}
                             <div class="errorlist">
@@ -568,7 +592,7 @@
                     
                     <!-- Mother's Email field -->
                     <div class="col-md-6">
-                        <label for="{{ parent_form.mother_email.id_for_label }}" class="form-label">Email</label>
+                        <label for="{{ parent_form.mother_email.id_for_label }}" class="form-label" style="color: white;">Email</label>
                         {{ parent_form.mother_email }}
                         {% if parent_form.mother_email.errors %}
                             <div class="errorlist">
@@ -579,7 +603,7 @@
                     
                     <!-- Mother's Education field -->
                     <div class="col-md-6">
-                        <label for="{{ parent_form.mother_education.id_for_label }}" class="form-label">Education</label>
+                        <label for="{{ parent_form.mother_education.id_for_label }}" class="form-label" style="color: white;">Education</label>
                         {{ parent_form.mother_education }}
                         {% if parent_form.mother_education.errors %}
                             <div class="errorlist">
@@ -590,7 +614,7 @@
                     
                     <!-- Mother's Place field -->
                     <div class="col-md-6">
-                        <label for="{{ parent_form.mother_place.id_for_label }}" class="form-label">Native Place</label>
+                        <label for="{{ parent_form.mother_place.id_for_label }}" class="form-label" style="color: white;">Native Place</label>
                         {{ parent_form.mother_place }}
                         {% if parent_form.mother_place.errors %}
                             <div class="errorlist">
@@ -601,9 +625,9 @@
                     
                     <!-- Mother's Photo field -->
                     <div class="col-md-12 text-center">
-                        <label for="{{ parent_form.mother_photo.id_for_label }}" class="form-label d-block">Mother's Photo</label>
+                        <label for="{{ parent_form.mother_photo.id_for_label }}" class="form-label d-block" style="color: white;">Mother's Photo</label>
                         <div class="photo-preview" id="motherPhotoPreview">
-                            <span>Photo Preview</span>
+                            <span style="color: white;">Photo Preview</span>
                         </div>
                         <div class="text-center">
                             {{ parent_form.mother_photo }}
@@ -619,15 +643,15 @@
             
             <!-- Declaration section -->
             <div class="terms-container">
-    <h3 style="text-align: center; margin-bottom: 10px;">TERMS AND CONDITIONS</h3>
-    <div class="terms-box" style="max-height: 150px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; margin-bottom: 15px;">
-        <p>I solemnly declare that the particulars furnished by me are true and correct. I have read the rules and regulations of this school and I undertake that my ward will abide by them.</p>
+    <h3 style="text-align: center; margin-bottom: 10px; color: white;" >TERMS AND CONDITIONS</h3>
+    <div class="terms-box" style="max-height: 150px; overflow-y: auto;  padding: 10px; margin-bottom: 15px;">
+        <p style="color: white;">I solemnly declare that the particulars furnished by me are true and correct. I have read the rules and regulations of this school and I undertake that my ward will abide by them.</p>
         <!-- You can add more terms and conditions text here as needed -->
     </div>
     
     <div class="acceptance-checkbox" style="margin-bottom: 15px;">
         <input type="checkbox" id="acceptTerms" required>
-        <label for="acceptTerms">I have read and accept the terms and conditions</label>
+        <label for="acceptTerms" style="color: white;">I have read and accept the terms and conditions</label>
     </div>
     
     

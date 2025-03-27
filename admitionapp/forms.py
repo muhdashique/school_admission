@@ -18,6 +18,8 @@ class MobileNumberForm(forms.ModelForm):
             raise forms.ValidationError("Enter a valid 10-digit mobile number")
         return mobile
 
+
+
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
@@ -25,27 +27,41 @@ class StudentForm(forms.ModelForm):
         widgets = {
             'dob': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'standard': forms.Select(attrs={'class': 'form-control'}), 
+            'standard': forms.Select(attrs={
+                'class': 'form-control',
+            }, choices=[('', '-- Select Standard --')] + [(str(std.id), std.name) for std in Standard.objects.all()]), 
             'mobile': forms.TextInput(attrs={'class': 'form-control'}),
             'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'sex': forms.Select(attrs={'class': 'form-control'}),
-            'nationality': forms.Select(attrs={'class': 'form-control'}),
-            'mother_tongue': forms.Select(attrs={'class': 'form-control'}),
-            'blood_group': forms.Select(attrs={'class': 'form-control'}),
-            'religion': forms.TextInput(attrs={'class': 'form-control'}),
-            'caste': forms.TextInput(attrs={'class': 'form-control'}),
-            'id_mark': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
-            'aadhar_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'sex': forms.Select(attrs={
+                'class': 'form-control',
+            }, choices=[
+                ('', '-- Select Gender --'),
+                ('Male', 'Male'),
+                ('Female', 'Female'),
+                ('Other', 'Other')
+            ]),
+            'nationality': forms.Select(attrs={
+                'class': 'form-control',
+            }, choices=[('', '-- Select Nationality --')] + Student.NATIONALITY_CHOICES),
+            'mother_tongue': forms.Select(attrs={
+                'class': 'form-control',
+            }, choices=[('', '-- Select Mother Tongue --')] + Student.MOTHER_TONGUE_CHOICES),
+            'blood_group': forms.Select(attrs={
+                'class': 'form-control',
+            }, choices=[('', '-- Select Blood Group --')] + Student.BLOOD_GROUP_CHOICES),
+            'religion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Religion'}),
+            'caste': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Caste'}),
+            'id_mark': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Enter Identification Mark'}),
+            'aadhar_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter 12-digit Aadhar Number'}),
             'student_photo': forms.FileInput(attrs={'class': 'form-control'}),
         }
     
-    def clean_mobile(self):
-        mobile = self.cleaned_data.get("mobile")
-        if not mobile.isdigit() or len(mobile) != 10:
-            raise forms.ValidationError("Enter a valid 10-digit mobile number")
-        return mobile
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
+        # Ensure the standard field has the latest choices
+        self.fields['standard'].widget.choices = [('', '-- Select Standard --')] + [
+            (str(std.id), std.name) for std in Standard.objects.all()
+        ]
         self.fields['mobile'].widget.attrs['readonly'] = True
 
 class ParentForm(forms.ModelForm):

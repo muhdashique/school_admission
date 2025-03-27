@@ -19,45 +19,48 @@ class Student(models.Model):
     name = models.CharField(max_length=100)
     dob = models.DateField()
     age = models.CharField(max_length=20, blank=True)  
-    sex = models.CharField(max_length=10, choices=[('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')])
+    sex = models.CharField(max_length=10, choices=[('', '-- Select Gender --'),('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')])
     address = models.TextField()
     NATIONALITY_CHOICES = [
-        ('Indian', 'Indian'),
-        ('American', 'American'),
-        ('British', 'British'),
-        ('Canadian', 'Canadian'),
-        ('Australian', 'Australian'),
-        ('Other', 'Other'),
-    ]
+    ('', '-- Select Nationality --'),  # Add this line
+    ('Indian', 'Indian'),
+    ('American', 'American'),
+    ('British', 'British'),
+    ('Canadian', 'Canadian'),
+    ('Australian', 'Australian'),
+    ('Other', 'Other'),
+]
     nationality = models.CharField(max_length=50, choices=NATIONALITY_CHOICES)
     mobile = models.CharField(max_length=10)
     aadhar_number = models.CharField(max_length=12, blank=True, help_text="12-digit Aadhar number")
     MOTHER_TONGUE_CHOICES = [
-        ('English', 'English'),
-        ('Hindi', 'Hindi'),
-        ('Tamil', 'Tamil'),
-        ('Telugu', 'Telugu'),
-        ('Malayalam', 'Malayalam'),
-        ('Kannada', 'Kannada'),
-        ('Bengali', 'Bengali'),
-        ('Marathi', 'Marathi'),
-        ('Gujarati', 'Gujarati'),
-        ('Punjabi', 'Punjabi'),
-        ('Other', 'Other'),
-    ]
+    ('', '-- Select Mother Tongue --'),  # Add this line
+    ('English', 'English'),
+    ('Hindi', 'Hindi'),
+    ('Tamil', 'Tamil'),
+    ('Telugu', 'Telugu'),
+    ('Malayalam', 'Malayalam'),
+    ('Kannada', 'Kannada'),
+    ('Bengali', 'Bengali'),
+    ('Marathi', 'Marathi'),
+    ('Gujarati', 'Gujarati'),
+    ('Punjabi', 'Punjabi'),
+    ('Other', 'Other'),
+]
     mother_tongue = models.CharField(max_length=50, choices=MOTHER_TONGUE_CHOICES, blank=True)
     religion = models.CharField(max_length=50, blank=True)
     caste = models.CharField(max_length=50, blank=True)
     BLOOD_GROUP_CHOICES = [
-        ('A+', 'A+'),
-        ('A-', 'A-'),
-        ('B+', 'B+'),
-        ('B-', 'B-'),
-        ('O+', 'O+'),
-        ('O-', 'O-'),
-        ('AB+', 'AB+'),
-        ('AB-', 'AB-')
-    ]
+    ('', '-- Select Blood Group --'),  # Add this line
+    ('A+', 'A+'),
+    ('A-', 'A-'),
+    ('B+', 'B+'),
+    ('B-', 'B-'),
+    ('O+', 'O+'),
+    ('O-', 'O-'),
+    ('AB+', 'AB+'),
+    ('AB-', 'AB-')
+]
     blood_group = models.CharField(max_length=7, choices=BLOOD_GROUP_CHOICES)
     id_mark = models.TextField(blank=True)
     student_photo = models.ImageField(upload_to='student_photos/', blank=True)
