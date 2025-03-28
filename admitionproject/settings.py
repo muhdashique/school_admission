@@ -4,13 +4,13 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://yasvitravels.com',
+    'https://admission.imcbs.com',
     
 ]
 # Security settings
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "your-default-secret-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() == "true"
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost 127.0.0.1").split()
+ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
