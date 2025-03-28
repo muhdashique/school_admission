@@ -7,13 +7,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #f3f4f6, #dbeafe); /* Light gradient background */
+            background: #97a482; /* Light gradient background */
             font-family: Arial, sans-serif;
         }
 
         .container {
             max-width: 600px;
-            background: white;
+            background: transparent;
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
@@ -28,7 +28,7 @@
 
         h3 {
             font-size: 18px;
-            color: #34495e;
+            color: #ffffff;
             margin-top: 20px;
             border-bottom: 2px solid #2980b9;
             padding-bottom: 5px;
@@ -36,7 +36,7 @@
 
         label {
             font-weight: bold;
-            color: #2c3e50;
+            color: #ffffff;
         }
 
         input, select, textarea {
@@ -80,11 +80,18 @@
             justify-content: space-between;
             margin-top: 20px;
         }
+        /* Add to your existing CSS */
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h2 class="text-center">Edit Student Details</h2>
+        <div class="container mb-3">
+            <a href="{% url 'admin_panel' %}" class="btn btn-custom">
+                <i class="fas fa-arrow-left"></i> Back to Admin Panel
+            </a>
+        </div>
+        <h2 class="text-center" style="color: white;">Edit Student Details</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <h3>Student Information</h3>
@@ -97,6 +104,35 @@
             </div>
         </form>
     </div>
+
+    <!-- Add this near the top of your adminpanel.html, just below the header section -->
+
+
+<style>
+.btn-custom {
+    background-color: #343a40; /* Dark grey */
+    color: #ffffff; /* White text */
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-custom:hover {
+    background-color: #212529; /* Slightly darker on hover */
+    color: #f8f9fa; /* Light grey text */
+}
+
+.btn-custom i {
+    font-size: 18px;
+}
+</style>
+
     <script>
         // Check if user is still logged in when coming back to this page via browser back button
         document.addEventListener('DOMContentLoaded', function() {

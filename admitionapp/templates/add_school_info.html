@@ -8,22 +8,54 @@
         /* Global Styles */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #97a482;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            padding: 20px;
         }
 
         /* Form Container */
         .form-container {
-            background-color: white;
+            background-color: transparent;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 400px;
+            width: 100%;
+            max-width: 400px;
             text-align: center;
+        }
+
+        /* Back Button */
+        .back-button {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-custom {
+            background-color: #343a40; /* Dark grey */
+            color: #ffffff; /* White text */
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-custom:hover {
+            background-color: #212529; /* Slightly darker on hover */
+            color: #f8f9fa; /* Light grey text */
+        }
+
+        .btn-custom i {
+            font-size: 18px;
         }
 
         /* Form Heading */
@@ -36,6 +68,7 @@
         form p {
             margin-bottom: 15px;
             text-align: left;
+            color: white;
         }
 
         input, textarea, select {
@@ -57,17 +90,25 @@
             border-radius: 5px;
             font-size: 16px;
             width: 100%;
+            transition: background 0.3s ease;
         }
 
         button:hover {
             background-color: #0056b3;
         }
+
     </style>
 </head>
 <body>
 
     <div class="form-container">
-        <h2>Add or Update School Information</h2>
+        <div class="back-button">
+            <a href="{% url 'admin_panel' %}" class="btn btn-custom">
+                <i class="fas fa-arrow-left"></i> Back to Admin Panel
+            </a>
+        </div>
+        
+        <h2 style="color: white;">Add or Update School Information</h2>
         
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
@@ -75,6 +116,7 @@
             <button type="submit">Save</button>
         </form>
     </div>
+
     <script>
         // Check if user is still logged in when coming back to this page via browser back button
         document.addEventListener('DOMContentLoaded', function() {
@@ -95,5 +137,6 @@
             });
         });
     </script>
+
 </body>
 </html>

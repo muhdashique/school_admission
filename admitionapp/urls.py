@@ -22,4 +22,5 @@ urlpatterns = [
     path('standards/delete/<int:standard_id>/', views.delete_standard, name='delete_standard'),
     path('check-auth/', views.check_auth, name='check_auth'),
     path('search-students/', views.search_students, name='search_students'),
+     path('approve-student/<int:student_id>/', views.approve_student, name='approve_student'),
 ]

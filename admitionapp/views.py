@@ -267,8 +267,6 @@ def admin_panel(request):
 def edit_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     parent = get_object_or_404(Parent, student=student)
-    
-    # Get school information
     school = SchoolInfo.objects.first()
 
     if request.method == 'POST':
@@ -292,7 +290,6 @@ def edit_student(request, student_id):
     })
 
 
-
 @login_required
 def delete_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
@@ -306,14 +303,18 @@ def delete_student(request, student_id):
 def edit_registered_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     
-    # Get school information
+    # Prevent editing approved students from the form
+    if student.is_approved and not request.user.is_staff:
+        messages.error(request, "This student has been approved and cannot be edited. Please contact the administrator for changes.")
+        return redirect('forms')
+    
     school = SchoolInfo.objects.first()
     
     if request.method == "POST":
-        form = StudentForm(request.POST, instance=student)
+        form = StudentForm(request.POST, request.FILES, instance=student)
         if form.is_valid():
             form.save()
-            return redirect('admission_form')  # Redirect after saving
+            return redirect('admission_form')
     else:
         form = StudentForm(instance=student)
     
@@ -531,3 +532,16 @@ def search_students(request):
         'school': school,
         'search_query': query
     })
+
+
+@login_required
+def approve_student(request, student_id):
+    if not request.user.is_staff:
+        messages.error(request, "You don't have permission to approve students.")
+        return redirect('admin_panel')
+        
+    student = get_object_or_404(Student, id=student_id)
+    student.is_approved = True
+    student.save()
+    messages.success(request, f"Student {student.name} has been approved and locked for user edits.")
+    return redirect('admin_panel')

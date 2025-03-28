@@ -64,6 +64,7 @@ class Student(models.Model):
     blood_group = models.CharField(max_length=7, choices=BLOOD_GROUP_CHOICES)
     id_mark = models.TextField(blank=True)
     student_photo = models.ImageField(upload_to='student_photos/', blank=True)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

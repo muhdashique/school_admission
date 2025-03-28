@@ -12,24 +12,26 @@
             --secondary-color: #2c3e50;
             --danger-color: #e74c3c;
             --dark-color: #343a40;
-            --light-color: #f8f9fa;
+            /* --light-color: #f8f9fa; */
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light-color);
+            background-color: #53682E;
             padding: 15px;
         }
         
         .container {
-            background: #fff;
+            background: transparent;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
             overflow-x: auto;
         }
-        
+        table{
+            background: #03961620;
+        }
         .header-section {
             display: flex;
             flex-wrap: wrap;
@@ -52,15 +54,22 @@
             align-items: center;
         }
         
-        .table thead {
+         thead {
             background-color: var(--dark-color);
             color: white;
             position: sticky;
             top: 0;
+            text-align: center;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 10px;
+            padding-bottom: 10px;
         }
         
-        .table tbody tr:hover {
-            background-color: rgba(0, 0, 0, 0.02);
+         tbody tr:hover {
+            /* background-color: rgba(0, 0, 0, 0.02); */
+            padding: 20px;
+            text-align: center;
         }
         
         .btn {
@@ -126,6 +135,13 @@
             background: linear-gradient(135deg, #c0392b, #a93226);
             color: white;
         }
+        th{
+            padding: 20px;
+        }
+        td{
+            padding: 10px;
+            color: #ffffff;
+        }
         
         /* Responsive table */
         @media (max-width: 992px) {
@@ -139,27 +155,28 @@
                 display: block;
             }
             
-            .table thead {
+             thead {
                 display: none;
+                color: white;
             }
             
-            .table tbody tr {
+             tbody tr {
                 display: block;
                 margin-bottom: 20px;
-                border: 1px solid #dee2e6;
+                border: 1px solid #53682E;
                 border-radius: 5px;
             }
             
-            .table tbody td {
+             tbody td {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 padding: 10px;
                 text-align: right;
-                border-bottom: 1px solid #eee;
+                border-bottom: 1px solid #53682E;
             }
             
-            .table tbody td:before {
+             tbody td:before {
                 content: attr(data-label);
                 font-weight: bold;
                 margin-right: 15px;
@@ -167,7 +184,7 @@
                 text-align: left;
             }
             
-            .table tbody td:last-child {
+             tbody td:last-child {
                 border-bottom: 0;
             }
             
@@ -230,7 +247,7 @@
         }
         /* school datails */
         .school-info-section {
-            background-color: #f4f6f9;
+            background-color: transparent;
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
@@ -251,11 +268,15 @@
         .school-details p {
             margin-bottom: 8px;
         }
+        .btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
     <!-- Add this code just before the table section in adminpanel.html -->
-<div class="container" style="margin-bottom: 20px; background-color: #F4F6F9;">
+<div class="container" style="margin-bottom: 20px; background-color: transparent">
     <div class="row mb-3">
         <div class="col-12">
             <form action="{% url 'search_students' %}" method="GET" class="d-flex">
@@ -264,7 +285,7 @@
                        aria-label="Search" 
                        name="query" 
                        value="{{ search_query }}">
-                <button class="btn btn-outline-primary" type="submit">
+                <button class="btn btn-outline-primary" style="color: white;" type="submit">
                     <i class="fas fa-search"></i> Search
                 </button>
             </form>
@@ -287,8 +308,8 @@
 <!-- Rest of the existing adminpanel.html remains the same -->
     <div class="header-section">
         <div class="welcome-message">
-            <h2>Welcome to Admin Panel</h2>
-            <p>Hello, {{ request.user.username }}</p>
+            <h2 style="color: white;">Welcome to Admin Panel</h2>
+            <p style="color: white;">Hello, {{ request.user.username }}</p>
         </div>
         
         <div class="action-buttons">
@@ -318,23 +339,23 @@
                 {% endif %}
             </div>
             <div class="col-md-9">
-                <h3 class="mb-3">{{ school.name|default:"School Name" }}</h3>
+                <h3 class="mb-3" style="color: white;">{{ school.name|default:"School Name" }}</h3>
                 <div class="school-details">
-                    <p><strong>Affiliation:</strong> {{ school.affiliation|default:"Not Available" }}</p>
-                    <p><strong>Managed By:</strong> {{ school.managed_by|default:"Not Available" }}</p>
-                    <p><strong>Address:</strong> {{ school.address|default:"Not Available" }}</p>
-                    <p><strong>Contact Numbers:</strong> {{ school.phone_numbers|default:"Not Available" }}</p>
-                    <p><strong>Academic Year:</strong> {{ school.academic_year|default:"Not Available" }}</p>
+                    <p style="color: white;"><strong>Affiliation:</strong> {{ school.affiliation|default:"Not Available" }}</p>
+                    <p style="color: white;"><strong>Managed By:</strong> {{ school.managed_by|default:"Not Available" }}</p>
+                    <p style="color: white;"><strong>Address:</strong> {{ school.address|default:"Not Available" }}</p>
+                    <p style="color: white;"><strong>Contact Numbers:</strong> {{ school.phone_numbers|default:"Not Available" }}</p>
+                    <p style="color: white;"><strong>Academic Year:</strong> {{ school.academic_year|default:"Not Available" }}</p>
                 </div>
             </div>
         </div>
     </div>
     
     <div class="container">
-        <h2 class="text-center mb-4">Student Records</h2>
+        <h2 class="text-center mb-4" style="color: white;">Student Records</h2>
         <div class="table-responsive">
             {% if students %}
-            <table class="table table-bordered table-hover">
+            <table class=" table-bordered table-hover" style="color: #53682E">
                 <thead>
                     <tr>
                         <th>NO</th>
@@ -367,6 +388,7 @@
                         <th>Mother's Mobile</th>
                         <th>Mother's Email</th>
                         <th>Mother's Place</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -422,11 +444,23 @@
                         <td>{{ student.parent.mother_email }}</td>
                         <td>{{ student.parent.mother_place }}</td>
                         <td>
+                            {% if student.is_approved %}
+                                <span class="badge bg-success">Approved</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
                             <a href="{% url 'edit_student' student.id %}" class="btn btn-sm btn-primary">Edit</a>
                             <a href="{% url 'delete_student' student.id %}" class="btn btn-sm btn-danger" 
                                onclick="return confirm('Are you sure you want to delete this student?');">
                                Delete
                             </a>
+                            {% if not student.is_approved %}
+                                <a href="{% url 'approve_student' student.id %}" class="btn btn-sm btn-success mt-1">
+                                    Approve
+                                </a>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}

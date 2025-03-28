@@ -25,7 +25,7 @@
             
         }
         .container {
-            background-color: white;
+            background-color: #6D8A44;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -53,7 +53,7 @@
             font-size: 16px;
         }
         button {
-            background-color: #4CAF50;
+            background-color: #b9caa1;
             color: white;
             border: none;
             padding: 12px 20px;
@@ -64,7 +64,7 @@
             transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #6D8A44;
         }
         button:disabled {
             background-color: #cccccc;
@@ -117,10 +117,47 @@
             color: #cc0000;
         }
     </style>
+    
+    <style>
+        .home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #97A482; /* Primary blue */
+            color: rgb(255, 255, 255);
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 100px; /* Pill-shaped */
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            margin-left: 300px;
+        }
+    
+        .home-btn i {
+            font-size: 18px;
+        }
+    
+        .home-btn:hover {
+            background-color: #97A482; /* Darker blue on hover */
+            transform: scale(1.05); /* Slight zoom effect */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+    
 </head>
 <body>
+    <div>
+        <a href="{% url 'index' %}" class="home-btn">
+            <i class="fas fa-home"></i> Home
+        </a>
+        
+    </div>
     <div class="container">
-        <h1>Mobile Registration</h1>
+      
+        
+        <h1 style="color: white;">Mobile Registration</h1>
         <div id="alert" class="alert"></div>
         
         <!-- Step 1: Enter Phone Number -->
@@ -128,15 +165,15 @@
             <form id="mobileForm">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="mobile">Enter your mobile number:</label>
+                    <label for="mobile" style="color: white;">Enter your mobile number:</label>
                     <input type="tel" id="mobile" name="mobile" placeholder="Enter mobile number" pattern="[0-9]{10}" required>
                 </div>
-                <button type="submit" id="getOtpBtn">Get OTP</button>
+                <button type="submit" id="getOtpBtn" onclick="forceShowOtpStep()">Get OTP</button>
             </form>
             <!-- Emergency button to force display OTP step -->
-            <button type="button" onclick="forceShowOtpStep()" style="margin-top: 10px; background-color: #6c757d;">
+            <!-- <button type="button" onclick="forceShowOtpStep()" style="margin-top: 10px; background-color: #6c757d;">
                 Show OTP Input (If OTP Received)
-            </button>
+            </button> -->
         </div>
         
         <!-- Step 2: Enter OTP -->
@@ -155,7 +192,7 @@
                         <input type="text" maxlength="1" id="otp6" class="otp-input">
                     </div>
                     <input type="hidden" id="fullOtp" name="otp">
-                    <div class="timer" id="timer">Resend OTP in <span id="countdownTime">60</span> seconds</div>
+                    <div class="timer" id="timer" style="color: white;">Resend OTP in <span id="countdownTime">60</span> seconds</div>
                 </div>
                 <button type="submit" id="verifyOtpBtn">Verify & Register</button>
             </form>
@@ -170,11 +207,11 @@
         <div id="completeStep" style="display: none;">
             <div class="form-group">
                 <div style="text-align: center; margin: 20px 0;">
-                    <svg width="80" height="80" viewBox="0 0 24 24" style="fill: #4CAF50;">
+                    <svg width="80" height="80" viewBox="0 0 24 24" style="fill: #ffffff;">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                     </svg>
                 </div>
-                <h2 style="text-align: center; color: #4CAF50;">Registration Successful!</h2>
+                <h2 style="text-align: center; color: #ffffff;">Registration Successful!</h2>
                 <p style="text-align: center;">You have successfully registered with your mobile number.</p>
             </div>
             <button onclick="startOver()">Done</button>
