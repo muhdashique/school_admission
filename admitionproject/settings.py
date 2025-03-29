@@ -10,8 +10,9 @@ CSRF_TRUSTED_ORIGINS = ['https://admission.imcbs.com'
 # Security settings
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "your-default-secret-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() == "true"
-ALLOWED_HOSTS = ['admission.imcbs.com','www.admission.imcbs.com']
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "admission.imcbs.com", "www.admission.imcbs.com"]
+
+
 
 
 # Application definition
