@@ -545,3 +545,37 @@ def approve_student(request, student_id):
     student.save()
     messages.success(request, f"Student {student.name} has been approved and locked for user edits.")
     return redirect('admin_panel')
+
+
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_superuser)
+def toggle_approval(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    student.is_approved = not student.is_approved  # Toggle the approval status
+    student.save()
+    
+    messages.success(request, f"Student {student.name} status updated to {'Approved' if student.is_approved else 'Pending'}.")
+    return redirect('admin_panel')
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_superuser)
+def set_status(request, student_id, status):
+    student = get_object_or_404(Student, id=student_id)
+    
+    if status == 'approved':
+        student.is_approved = True
+        student.status = 'approved'
+    elif status == 'pending':
+        student.is_approved = False
+        student.status = 'pending'
+    elif status == 'cancel':
+        student.is_approved = False
+        student.status = 'cancel'
+    
+    student.save()
+    
+    messages.success(request, f"Student {student.name} status updated to {student.get_status_display()}.")
+    return redirect('admin_panel')

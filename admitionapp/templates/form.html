@@ -1,50 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCHOOL ADMISSION</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
-         body {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-        margin: 0 auto;
-        padding: 15px;
-        background-color: #efefef;
-        background-image: url("https://img.freepik.com/free-photo/design-space-paper-textured-background_53876-71492.jpg");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-        
-    }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            padding: 15px;
+            /* background-image: url("https://img.freepik.com/free-photo/design-space-paper-textured-background_53876-71492.jpg"); */
+            background-color: #FFF9D9;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+
+        }
+
         .container {
-            max-width: 100%;
+            max-width: 1400px;
             width: 100%;
             padding: 0 15px;
-        
+
         }
+
         .form-section {
-            background:transparent ;
+            background: transparent;
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
             width: 100%;
         }
+
         .required-field::after {
             content: "*";
             color: red;
             margin-left: 4px;
         }
+
         .form-label {
             font-weight: 500;
         }
+
         .errorlist {
             color: #dc3545;
             list-style-type: none;
             padding-left: 0;
             font-size: 0.875rem;
         }
+
         .photo-preview {
             width: 150px;
             height: 150px;
@@ -55,6 +65,7 @@
             margin-bottom: 10px;
             margin: 0 auto;
         }
+
         .header {
             display: flex;
             flex-direction: column;
@@ -62,29 +73,34 @@
             text-align: center;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #ffffff;
+            border-bottom: 2px solid #000000;
         }
+
         .logo {
             width: 100px;
             height: 100px;
-            border-radius: 10px; 
+            border-radius: 10px;
             border: 1px solid #cfcccc;
             margin-bottom: 10px;
         }
+
         .school-info {
             text-align: center;
             flex-grow: 1;
-            color: white;
+            color: rgb(0, 0, 0);
         }
+
         .school-name {
             font-size: 24px;
             font-weight: bold;
             margin: 0;
         }
+
         .school-details {
             font-size: 12px;
             margin: 5px 0;
         }
+
         .photo-box {
             width: 120px;
             height: 120px;
@@ -103,40 +119,51 @@
             justify-content: center;
             margin: 0 auto 10px;
         }
+
         .form-title {
             text-align: center;
             font-weight: bold;
             font-size: 18px;
             margin-bottom: 20px;
-            color: white;
+            color: rgb(0, 0, 0);
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
             text-align: center;
         }
-        table, th, td {
+
+        table,
+        th,
+        td {
             border: 1px solid #000;
         }
-        th, td {
+
+        th,
+        td {
             padding: 8px;
             text-align: center;
         }
+
         th {
-            background-color: #f2f2f2;
+            background-color: #000000;
         }
+
         .declaration {
             text-align: center;
             margin: 20px 0;
             width: 100%;
         }
+
         .declaration p {
             text-align: justify;
             max-width: 800px;
             margin: 0 auto;
-            color: white;
+            color: rgb(0, 0, 0);
         }
+
         .signature-line {
             display: flex;
             justify-content: space-between;
@@ -144,531 +171,627 @@
             max-width: 800px;
             margin: 20px auto;
         }
+
         .office-use {
             margin-top: 20px;
             border-top: 1px solid #000;
             padding-top: 10px;
             text-align: center;
         }
+
         .office-use-title {
             text-align: center;
             font-weight: bold;
             margin-bottom: 10px;
         }
+
         .table-responsive {
             width: 100%;
             overflow-x: auto;
         }
+
         .table-responsive {
             overflow-x: auto;
             width: 100%;
         }
+
         table {
             width: 100%;
-            min-width: 1200px; /* Ensure horizontal scrolling on small screens */
+            min-width: 1200px;
+            /* Ensure horizontal scrolling on small screens */
         }
+
         .terms-box {
             max-height: 150px;
             overflow-y: auto;
             padding: 10px;
             margin-bottom: 15px;
         }
-        
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
                 text-align: center;
             }
+
             .header .logo {
                 margin-bottom: 10px;
-                margin: 20px 0; 
-                border-radius: 10px; 
-                width: 150px; /* Adjust width */
-                height: auto; 
+                margin: 20px 0;
+                border-radius: 10px;
+                width: 150px;
+                /* Adjust width */
+                height: auto;
             }
+
             .school-name {
                 font-size: 18px;
             }
+
             .school-details {
                 font-size: 20px;
             }
+
             .form-section {
                 padding: 10px;
             }
+
             .photo-preview {
                 width: 120px;
                 height: 120px;
             }
+
             .form-label {
                 font-size: 14px;
             }
+
             .btn-lg {
                 padding: 0.5rem 1rem;
                 font-size: 1rem;
             }
         }
-        
+
         /* Ensure full width for form inputs on mobile */
         @media (max-width: 576px) {
-            .col-md-6, .col-md-4, .col-md-12 {
+
+            .col-md-6,
+            .col-md-4,
+            .col-md-12 {
                 width: 100%;
             }
-            .row > div {
+
+            .row>div {
                 margin-bottom: 10px;
             }
         }
-        
     </style>
     <!-- Add this CSS in the <style> section to improve select appearance -->
-        <style>
-            /* Style for select dropdown placeholder */
-            select option[value=""] {
-                color: #6c757d; /* Gray color for placeholder */
-            }
-            select option:not([value=""]) {
-                color: #000; /* Black color for other options */
-            }
-            select:invalid {
-                color: #6c757d; /* Gray color when no selection is made */
-            }
-            select:valid {
-                color: #000; /* Black color when a selection is made */
-            }
-        </style>
+    <style>
+        /* Style for select dropdown placeholder */
+        select option[value=""] {
+            color: #000000;
+            /* Gray color for placeholder */
+        }
+
+        select option:not([value=""]) {
+            color: #000;
+            /* Black color for other options */
+        }
+
+        select:invalid {
+            color: #000000;
+            /* Gray color when no selection is made */
+        }
+
+        select:valid {
+            color: #000;
+            /* Black color when a selection is made */
+        }
+    
+
+    </style>
+    <style>
+        .logout-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #ffffff;
+            color: #cb1c1c;
+            text-decoration: none;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: 1px solid #d31313;
+        }
+        
+        .logout-button:hover {
+            background-color: #eb0f0f;
+            color: #ffffff;
+        }
+        
+        .logout-button i {
+            font-size: 14px;
+        }
+    </style>
 </head>
+
 <body>
-    <div class="container py-5">
-        <!-- Text center for messages -->
-        <div class="text-center mb-4">
-            <h1 style="color: white;">Student Admission Form</h1>
-            <div class="text-center" style="margin-bottom: 70px;">
-                {% if registered_number %}
-                <h2 style="color: white;">Welcome, {{ registered_number }}</h2>
-                {% endif %}
+    <div class=" py-5">
+        <div class="container">
+            <a href="{% url 'admin_logout' %}" class="logout-button">
+                <i class="fa-solid fa-right-from-bracket"></i> Log Out
+            </a>
+
+            <!-- Text center for messages -->
+            <div class="text-center mb-4">
+                <h1 style="color: rgb(0, 0, 0);">Student Admission Form</h1>
+                <div class="text-center" style="margin-bottom: 70px;">
+                    {% if registered_number %}
+                    <h2 style="color: rgb(0, 0, 0);">Welcome, {{ registered_number }}</h2>
+                    {% endif %}
+                </div>
             </div>
-        </div>
-        
-       
-       <!-- Header -->
-       <div class="header">
-        {% if school.logo %}
-            <img src="{{ school.logo.url }}" alt="School Logo" class="logo">
-        {% else %}
-            <img src="/api/placeholder/100/100" alt="School Logo" class="logo">
-        {% endif %}
-        
-        <div class="school-info">
-            <h1 class="school-name">{{ school.name|default:"School Name" }}</h1>
-            <h1 class="school-details">{{ school.affiliation|default:"Affiliation Information" }}</h1>
-            <p class="school-details">Run by: {{ school.managed_by|default:"Organization Name" }}</p>
-            <p class="school-details">{{ school.address|default:"School Address" }}</p>
-            <p class="school-details">Tel: {{ school.phone_numbers|default:"Contact Numbers" }}</p>
-            <p class="school-details">Academic Year: {{ school.academic_year|default:"Current Academic Year" }}</p>
-        </div>
-    </div>
 
-        <div class="form-title">APPLICATION FOR ADMISSION</div>
 
-        <form method="post" enctype="multipart/form-data" class="needs-validation" action="{% url 'admission_form' %}" novalidate>
-            {% csrf_token %}
-            
-            <!-- Student Information Section -->
-            <div class="form-section">
-                <h3 class="mb-3 text-center"></h3>
-                <div class="row g-3">
-                    <!-- Name field -->
-                    <div class="col-md-6">
-                        <label for="{{ student_form.name.id_for_label }}" class="form-label required-field" style="color: white;">Full Name</label>
-                        {{ student_form.name }}
-                        {% if student_form.name.errors %}
+            <!-- Header -->
+            <div class="header">
+                {% if school.logo %}
+                <img src="{{ school.logo.url }}" alt="School Logo" class="logo">
+                {% else %}
+                <img src="/api/placeholder/100/100" alt="School Logo" class="logo">
+                {% endif %}
+
+                <div class="school-info">
+                    <h1 class="school-name">{{ school.name|default:"School Name" }}</h1>
+                    <h1 class="school-details">{{ school.affiliation|default:"Affiliation Information" }}</h1>
+                    <p class="school-details">Run by: {{ school.managed_by|default:"Organization Name" }}</p>
+                    <p class="school-details">{{ school.address|default:"School Address" }}</p>
+                    <p class="school-details">Tel: {{ school.phone_numbers|default:"Contact Numbers" }}</p>
+                    <p class="school-details">Academic Year: {{ school.academic_year|default:"Current Academic Year" }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="form-title">APPLICATION FOR ADMISSION</div>
+
+            <form method="post" enctype="multipart/form-data" class="needs-validation"
+                action="{% url 'admission_form' %}" novalidate>
+                {% csrf_token %}
+
+                <!-- Student Information Section -->
+                <div class="form-section">
+                    <h3 class="mb-3 text-center"></h3>
+                    <div class="row g-3">
+                        <!-- Name field -->
+                        <div class="col-md-6">
+                            <label for="{{ student_form.name.id_for_label }}" class="form-label required-field"
+                                style="color: rgb(0, 0, 0);">Full Name</label>
+                            {{ student_form.name }}
+                            {% if student_form.name.errors %}
                             <div class="errorlist">
                                 {{ student_form.name.errors }}
                             </div>
-                        {% endif %}
-                    </div>
+                            {% endif %}
+                        </div>
 
 
-                    <script>
-                        document.addEventListener("DOMContentLoaded", function() {
-                            let nameField = document.querySelector("input[name='name']");
-                            nameField.addEventListener("input", function() {
-                                this.value = this.value.toUpperCase();
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                let nameField = document.querySelector("input[name='name']");
+                                nameField.addEventListener("input", function () {
+                                    this.value = this.value.toUpperCase();
+                                });
                             });
-                        });
                         </script>
-                        
 
-                    
-                    <!-- Standard/Class field -->
-                    <div class="col-md-6">
-                        <label for="{{ student_form.standard.id_for_label }}" class="form-label required-field " style="color: white;">Class/Standard</label>
-                        {{ student_form.standard }}
-                        {% if student_form.standard.errors %}
+
+
+                        <!-- Standard/Class field -->
+                        <div class="col-md-6">
+                            <label for="{{ student_form.standard.id_for_label }}" class="form-label required-field "
+                                style="color: rgb(0, 0, 0);">Class/Standard</label>
+                            {{ student_form.standard }}
+                            {% if student_form.standard.errors %}
                             <div class="errorlist">
                                 {{ student_form.standard.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Date of Birth field -->
-                    <div class="col-md-4">
-                        <label for="{{ student_form.dob.id_for_label }}" class="form-label required-field" style="color: white;">Date of Birth</label>
-                        {{ student_form.dob }}
-                        {% if student_form.dob.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Date of Birth field -->
+                        <div class="col-md-4">
+                            <label for="{{ student_form.dob.id_for_label }}" class="form-label required-field"
+                                style="color: rgb(0, 0, 0);">Date of Birth</label>
+                            {{ student_form.dob }}
+                            {% if student_form.dob.errors %}
                             <div class="errorlist">
                                 {{ student_form.dob.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Age field -->
-                    <div class="":>
-                        <label for="{{ student_form.age.id_for_label }}" class="form-label" style="color: white;">Age</label>
-                        {{ student_form.age }}
-                        {% if student_form.age.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Age field -->
+                        <div class="" :>
+                            <label for="{{ student_form.age.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Age</label>
+                            {{ student_form.age }}
+                            {% if student_form.age.errors %}
                             <div class="errorlist">
                                 {{ student_form.age.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Sex/Gender field -->
-                    <div class="col-md-4">
-                        <label for="{{ student_form.sex.id_for_label }}" class="form-label required-field" style="color: white;">Gender</label>
-                        {{ student_form.sex }}
-                        {% if student_form.sex.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Sex/Gender field -->
+                        <div class="col-md-4">
+                            <label for="{{ student_form.sex.id_for_label }}" class="form-label required-field"
+                                style="color: rgb(0, 0, 0);">Gender</label>
+                            {{ student_form.sex }}
+                            {% if student_form.sex.errors %}
                             <div class="errorlist">
                                 {{ student_form.sex.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Mobile field -->
-                    <div class="col-md-6">
-                        <label for="{{ student_form.mobile.id_for_label }}" class="form-label required-field" style="color: white;">Mobile Number</label>
-                        <input type="text" name="{{ student_form.mobile.html_name }}" value="{{ registered_number }}" 
-                               id="{{ student_form.mobile.id_for_label }}" class="form-control" readonly>
-                        <small class="form-text text-muted"></small>
-                        {% if student_form.mobile.errors %}
-                        <div class="errorlist">
-                            {{ student_form.mobile.errors }}
+                            {% endif %}
                         </div>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <label for="{{ student_form.aadhar_number.id_for_label }}" class="form-label" style="color: white;">Aadhar Number</label>
-                        <input type="text" name="aadhar_number" id="{{ student_form.aadhar_number.id_for_label }}" 
-                               class="form-control" placeholder="Enter 12-digit Aadhar number">
-                        <small class="form-text text-muted">12-digit Aadhar number</small>
-                        {% if student_form.aadhar_number.errors %}
+
+                        <!-- Mobile field -->
+                        <div class="col-md-6">
+                            <label for="{{ student_form.mobile.id_for_label }}" class="form-label required-field"
+                                style="color: rgb(0, 0, 0);">Mobile Number</label>
+                            <input type="text" name="{{ student_form.mobile.html_name }}"
+                                value="{{ registered_number }}" id="{{ student_form.mobile.id_for_label }}"
+                                class="form-control" readonly>
+                            <small class="form-text text-muted"></small>
+                            {% if student_form.mobile.errors %}
+                            <div class="errorlist">
+                                {{ student_form.mobile.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ student_form.aadhar_number.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Aadhar Number</label>
+                            <input type="text" name="aadhar_number" id="{{ student_form.aadhar_number.id_for_label }}"
+                                class="form-control" placeholder="Enter 12-digit Aadhar number">
+                            <small class="form-text text-muted">12-digit Aadhar number</small>
+                            {% if student_form.aadhar_number.errors %}
                             <div class="errorlist">
                                 {{ student_form.aadhar_number.errors }}
                             </div>
-                        {% endif %}
-                    </div>
+                            {% endif %}
+                        </div>
 
-                    <!-- Blood group field -->
-                    <div class="col-md-4">
-                        <label for="{{ student_form.blood_group.id_for_label }}" class="form-label" style="color: white;">Blood Group</label>
-                        {{ student_form.blood_group }}
-                        {% if student_form.blood_group.errors %}
+                        <!-- Blood group field -->
+                        <div class="col-md-4">
+                            <label for="{{ student_form.blood_group.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Blood Group</label>
+                            {{ student_form.blood_group }}
+                            {% if student_form.blood_group.errors %}
                             <div class="errorlist">
                                 {{ student_form.blood_group.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Address field -->
-                    <div class="col-12">
-                        <label for="{{ student_form.address.id_for_label }}" class="form-label required-field" style="color: white;">Permanent Address</label>
-                        {{ student_form.address }}
-                        {% if student_form.address.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Address field -->
+                        <div class="col-12">
+                            <label for="{{ student_form.address.id_for_label }}" class="form-label required-field"
+                                style="color: rgb(0, 0, 0);">Permanent Address</label>
+                            {{ student_form.address }}
+                            {% if student_form.address.errors %}
                             <div class="errorlist">
                                 {{ student_form.address.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Nationality field -->
-                    <div class="col-md-4">
-                        <label for="{{ student_form.nationality.id_for_label }}" class="form-label required-field" style="color: white;">Nationality</label>
-                        {{ student_form.nationality }}
-                        {% if student_form.nationality.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Nationality field -->
+                        <div class="col-md-4">
+                            <label for="{{ student_form.nationality.id_for_label }}" class="form-label required-field"
+                                style="color: rgb(0, 0, 0);">Nationality</label>
+                            {{ student_form.nationality }}
+                            {% if student_form.nationality.errors %}
                             <div class="errorlist">
                                 {{ student_form.nationality.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Mother Tongue field -->
-                    <div class="col-md-4">
-                        <label for="{{ student_form.mother_tongue.id_for_label }}" class="form-label" style="color: white;">Mother Tongue</label>
-                        {{ student_form.mother_tongue }}
-                        {% if student_form.mother_tongue.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Mother Tongue field -->
+                        <div class="col-md-4">
+                            <label for="{{ student_form.mother_tongue.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Mother Tongue</label>
+                            {{ student_form.mother_tongue }}
+                            {% if student_form.mother_tongue.errors %}
                             <div class="errorlist">
                                 {{ student_form.mother_tongue.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Religion field -->
-                    <div class="col-md-4">
-                        <label for="{{ student_form.religion.id_for_label }}" class="form-label" style="color: white;">Religion</label>
-                        {{ student_form.religion }}
-                        {% if student_form.religion.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Religion field -->
+                        <div class="col-md-4">
+                            <label for="{{ student_form.religion.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Religion</label>
+                            {{ student_form.religion }}
+                            {% if student_form.religion.errors %}
                             <div class="errorlist">
                                 {{ student_form.religion.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Caste field -->
-                    <div class="col-md-4">
-                        <label for="{{ student_form.caste.id_for_label }}" class="form-label" style="color: white;">Caste</label>
-                        {{ student_form.caste }}
-                        {% if student_form.caste.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Caste field -->
+                        <div class="col-md-4">
+                            <label for="{{ student_form.caste.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Caste</label>
+                            {{ student_form.caste }}
+                            {% if student_form.caste.errors %}
                             <div class="errorlist">
                                 {{ student_form.caste.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Identification Mark field -->
-                    <div class="col-md-8">
-                        <label for="{{ student_form.id_mark.id_for_label }}" class="form-label" style="color: white;" >Identification Mark</label>
-                        {{ student_form.id_mark }}
-                        {% if student_form.id_mark.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Identification Mark field -->
+                        <div class="col-md-8">
+                            <label for="{{ student_form.id_mark.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Identification Mark</label>
+                            {{ student_form.id_mark }}
+                            {% if student_form.id_mark.errors %}
                             <div class="errorlist">
                                 {{ student_form.id_mark.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Student Photo field -->
-                    <div class="col-md-12 text-center">
-                        <label for="{{ student_form.student_photo.id_for_label }}" class="form-label d-block" style="color: white;">Student Photo</label>
-                        <div class="photo-preview" id="studentPhotoPreview">
-                            <span style="color: white;">Photo Preview</span>
+                            {% endif %}
                         </div>
-                        <div class="text-center">
-                            {{ student_form.student_photo }}
-                        </div>
-                        {% if student_form.student_photo.errors %}
+
+                        <!-- Student Photo field -->
+                        <div class="col-md-12 text-center">
+                            <label for="{{ student_form.student_photo.id_for_label }}" class="form-label d-block"
+                                style="color: rgb(0, 0, 0);">Student Photo</label>
+                            <div class="photo-preview" id="studentPhotoPreview">
+                                <span style="color: rgb(0, 0, 0);">Photo Preview</span>
+                            </div>
+                            <div class="text-center">
+                                {{ student_form.student_photo }}
+                            </div>
+                            {% if student_form.student_photo.errors %}
                             <div class="errorlist">
                                 {{ student_form.student_photo.errors }}
                             </div>
-                        {% endif %}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Parent Information Section -->
-            <div class="form-section">
-                <h3 class="mb-3 text-center" style="color: white;">Parent Information</h3>
-                
-                <!-- Father's Details -->
-                <h5 class="mb-3 text-center" style="color: white;">Father's Details</h5>
-                <div class="row g-3">
-                    <!-- Father's Name field -->
-                    <div class="col-md-6">
-                        <label for="{{ parent_form.father_name.id_for_label }}" class="form-label required-field" style="color: white;">Father's Name</label>
-                        {{ parent_form.father_name }}
-                        {% if parent_form.father_name.errors %}
+
+                <!-- Parent Information Section -->
+                <div class="form-section">
+                    <h3 class="mb-3 text-center" style="color: rgb(0, 0, 0);">Parent Information</h3>
+
+                    <!-- Father's Details -->
+                    <h5 class="mb-3 text-center" style="color: rgb(0, 0, 0);">Father's Details</h5>
+                    <div class="row g-3">
+                        <!-- Father's Name field -->
+                        <div class="col-md-6">
+                            <label for="{{ parent_form.father_name.id_for_label }}" class="form-label required-field"
+                                style="color: rgb(0, 0, 0);">Father's Name</label>
+                            {{ parent_form.father_name }}
+                            {% if parent_form.father_name.errors %}
                             <div class="errorlist">
                                 {{ parent_form.father_name.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Father's Occupation field -->
-                    <div class="col-md-6">
-                        <label for="{{ parent_form.father_job.id_for_label }}" class="form-label" style="color: white;">Occupation</label>
-                        {{ parent_form.father_job }}
-                        {% if parent_form.father_job.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Father's Occupation field -->
+                        <div class="col-md-6">
+                            <label for="{{ parent_form.father_job.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Occupation</label>
+                            {{ parent_form.father_job }}
+                            {% if parent_form.father_job.errors %}
                             <div class="errorlist">
                                 {{ parent_form.father_job.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Father's Mobile field -->
-                    <div class="col-md-6">
-                        <label for="{{ parent_form.father_mobile.id_for_label }}" class="form-label required-field" style="color: white;">Mobile Number</label>
-                        {{ parent_form.father_mobile }}
-                        {% if parent_form.father_mobile.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Father's Mobile field -->
+                        <div class="col-md-6">
+                            <label for="{{ parent_form.father_mobile.id_for_label }}" class="form-label required-field"
+                                style="color: rgb(0, 0, 0);">Mobile Number</label>
+                            {{ parent_form.father_mobile }}
+                            {% if parent_form.father_mobile.errors %}
                             <div class="errorlist">
                                 {{ parent_form.father_mobile.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Father's Email field -->
-                    <div class="col-md-6">
-                        <label for="{{ parent_form.father_email.id_for_label }}" class="form-label" style="color: white;">Email</label>
-                        {{ parent_form.father_email }}
-                        {% if parent_form.father_email.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Father's Email field -->
+                        <div class="col-md-6">
+                            <label for="{{ parent_form.father_email.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Email</label>
+                            {{ parent_form.father_email }}
+                            {% if parent_form.father_email.errors %}
                             <div class="errorlist">
                                 {{ parent_form.father_email.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Father's Education field -->
-                    <div class="col-md-6">
-                        <label for="{{ parent_form.father_education.id_for_label }}" class="form-label" style="color: white;">Education</label>
-                        {{ parent_form.father_education }}
-                        {% if parent_form.father_education.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Father's Education field -->
+                        <div class="col-md-6">
+                            <label for="{{ parent_form.father_education.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Education</label>
+                            {{ parent_form.father_education }}
+                            {% if parent_form.father_education.errors %}
                             <div class="errorlist">
                                 {{ parent_form.father_education.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Father's Place field -->
-                    <div class="col-md-6">
-                        <label for="{{ parent_form.father_place.id_for_label }}" class="form-label" style="color: white;">Native Place</label>
-                        {{ parent_form.father_place }}
-                        {% if parent_form.father_place.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Father's Place field -->
+                        <div class="col-md-6">
+                            <label for="{{ parent_form.father_place.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Native Place</label>
+                            {{ parent_form.father_place }}
+                            {% if parent_form.father_place.errors %}
                             <div class="errorlist">
                                 {{ parent_form.father_place.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Father's Photo field -->
-                    <div class="col-md-12 text-center">
-                        <label for="{{ parent_form.father_photo.id_for_label }}" class="form-label d-block" style="color: white;">Father's Photo</label>
-                        <div class="photo-preview" id="fatherPhotoPreview">
-                            <span style="color: white;">Photo Preview</span>
+                            {% endif %}
                         </div>
-                        <div class="text-center">
-                            {{ parent_form.father_photo }}
-                        </div>
-                        {% if parent_form.father_photo.errors %}
+
+                        <!-- Father's Photo field -->
+                        <div class="col-md-12 text-center">
+                            <label for="{{ parent_form.father_photo.id_for_label }}" class="form-label d-block"
+                                style="color: rgb(0, 0, 0);">Father's Photo</label>
+                            <div class="photo-preview" id="fatherPhotoPreview">
+                                <span style="color: rgb(0, 0, 0);">Photo Preview</span>
+                            </div>
+                            <div class="text-center">
+                                {{ parent_form.father_photo }}
+                            </div>
+                            {% if parent_form.father_photo.errors %}
                             <div class="errorlist">
                                 {{ parent_form.father_photo.errors }}
                             </div>
-                        {% endif %}
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-                
-                <!-- Mother's Details -->
-                <h5 class="mt-4 mb-3 text-center" style="color: white;" >Mother's Details</h5>
-                <div class="row g-3">
-                    <!-- Mother's Name field -->
-                    <div class="col-md-6">
-                        <label for="{{ parent_form.mother_name.id_for_label }}" class="form-label required-field" style="color: white;">Mother's Name</label>
-                        {{ parent_form.mother_name }}
-                        {% if parent_form.mother_name.errors %}
+
+                    <!-- Mother's Details -->
+                    <h5 class="mt-4 mb-3 text-center" style="color: rgb(0, 0, 0);">Mother's Details</h5>
+                    <div class="row g-3">
+                        <!-- Mother's Name field -->
+                        <div class="col-md-6">
+                            <label for="{{ parent_form.mother_name.id_for_label }}" class="form-label required-field"
+                                style="color: rgb(0, 0, 0);">Mother's Name</label>
+                            {{ parent_form.mother_name }}
+                            {% if parent_form.mother_name.errors %}
                             <div class="errorlist">
                                 {{ parent_form.mother_name.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Mother's Occupation field -->
-                    <div class="col-md-6">
-                        <label for="{{ parent_form.mother_job.id_for_label }}" class="form-label" style="color: white;">Occupation</label>
-                        {{ parent_form.mother_job }}
-                        {% if parent_form.mother_job.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Mother's Occupation field -->
+                        <div class="col-md-6">
+                            <label for="{{ parent_form.mother_job.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Occupation</label>
+                            {{ parent_form.mother_job }}
+                            {% if parent_form.mother_job.errors %}
                             <div class="errorlist">
                                 {{ parent_form.mother_job.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Mother's Mobile field -->
-                    <div class="col-md-6">
-                        <label for="{{ parent_form.mother_mobile.id_for_label }}" class="form-label required-field" style="color: white;">Mobile Number</label>
-                        {{ parent_form.mother_mobile }}
-                        {% if parent_form.mother_mobile.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Mother's Mobile field -->
+                        <div class="col-md-6">
+                            <label for="{{ parent_form.mother_mobile.id_for_label }}" class="form-label required-field"
+                                style="color: rgb(0, 0, 0);">Mobile Number</label>
+                            {{ parent_form.mother_mobile }}
+                            {% if parent_form.mother_mobile.errors %}
                             <div class="errorlist">
                                 {{ parent_form.mother_mobile.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Mother's Email field -->
-                    <div class="col-md-6">
-                        <label for="{{ parent_form.mother_email.id_for_label }}" class="form-label" style="color: white;">Email</label>
-                        {{ parent_form.mother_email }}
-                        {% if parent_form.mother_email.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Mother's Email field -->
+                        <div class="col-md-6">
+                            <label for="{{ parent_form.mother_email.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Email</label>
+                            {{ parent_form.mother_email }}
+                            {% if parent_form.mother_email.errors %}
                             <div class="errorlist">
                                 {{ parent_form.mother_email.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Mother's Education field -->
-                    <div class="col-md-6">
-                        <label for="{{ parent_form.mother_education.id_for_label }}" class="form-label" style="color: white;">Education</label>
-                        {{ parent_form.mother_education }}
-                        {% if parent_form.mother_education.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Mother's Education field -->
+                        <div class="col-md-6">
+                            <label for="{{ parent_form.mother_education.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Education</label>
+                            {{ parent_form.mother_education }}
+                            {% if parent_form.mother_education.errors %}
                             <div class="errorlist">
                                 {{ parent_form.mother_education.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Mother's Place field -->
-                    <div class="col-md-6">
-                        <label for="{{ parent_form.mother_place.id_for_label }}" class="form-label" style="color: white;">Native Place</label>
-                        {{ parent_form.mother_place }}
-                        {% if parent_form.mother_place.errors %}
+                            {% endif %}
+                        </div>
+
+                        <!-- Mother's Place field -->
+                        <div class="col-md-6">
+                            <label for="{{ parent_form.mother_place.id_for_label }}" class="form-label"
+                                style="color: rgb(0, 0, 0);">Native Place</label>
+                            {{ parent_form.mother_place }}
+                            {% if parent_form.mother_place.errors %}
                             <div class="errorlist">
                                 {{ parent_form.mother_place.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Mother's Photo field -->
-                    <div class="col-md-12 text-center">
-                        <label for="{{ parent_form.mother_photo.id_for_label }}" class="form-label d-block" style="color: white;">Mother's Photo</label>
-                        <div class="photo-preview" id="motherPhotoPreview">
-                            <span style="color: white;">Photo Preview</span>
+                            {% endif %}
                         </div>
-                        <div class="text-center">
-                            {{ parent_form.mother_photo }}
-                        </div>
-                        {% if parent_form.mother_photo.errors %}
+
+                        <!-- Mother's Photo field -->
+                        <div class="col-md-12 text-center">
+                            <label for="{{ parent_form.mother_photo.id_for_label }}" class="form-label d-block"
+                                style="color: rgb(0, 0, 0);">Mother's Photo</label>
+                            <div class="photo-preview" id="motherPhotoPreview">
+                                <span style="color: rgb(0, 0, 0);">Photo Preview</span>
+                            </div>
+                            <div class="text-center">
+                                {{ parent_form.mother_photo }}
+                            </div>
+                            {% if parent_form.mother_photo.errors %}
                             <div class="errorlist">
                                 {{ parent_form.mother_photo.errors }}
                             </div>
-                        {% endif %}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Declaration section -->
-            <div class="terms-container">
-    <h3 style="text-align: center; margin-bottom: 10px; color: white;" >TERMS AND CONDITIONS</h3>
-    <div class="terms-box" style="max-height: 150px; overflow-y: auto;  padding: 10px; margin-bottom: 15px;">
-        <p style="color: white;">I solemnly declare that the particulars furnished by me are true and correct. I have read the rules and regulations of this school and I undertake that my ward will abide by them.</p>
-        <!-- You can add more terms and conditions text here as needed -->
-    </div>
-    
-    <div class="acceptance-checkbox" style="margin-bottom: 15px;">
-        <input type="checkbox" id="acceptTerms" required>
-        <label for="acceptTerms" style="color: white;">I have read and accept the terms and conditions</label>
-    </div>
-    
-    
-</div>
 
-<!-- Submit button with JavaScript to check for acceptance -->
-<div class="text-center my-4">
-    <button type="submit" id="submitButton" class="btn btn-primary btn-lg px-5" disabled>Submit Application</button>
-</div>
+                <!-- Declaration section -->
+                <div class="terms-container">
+                    <h3 style="text-align: center; margin-bottom: 10px; color: rgb(0, 0, 0);">TERMS AND CONDITIONS</h3>
+                    <div class="terms-box"
+                        style="max-height: 150px; overflow-y: auto;  padding: 10px; margin-bottom: 15px;">
+                        <p style="color: rgb(0, 0, 0);">I solemnly declare that the particulars furnished by me are true
+                            and correct. I have read the rules and regulations of this school and I undertake that my
+                            ward will abide by them.</p>
+                        <!-- You can add more terms and conditions text here as needed -->
+                    </div>
 
-<script>
-    document.getElementById('acceptTerms').addEventListener('change', function() {
-        document.getElementById('submitButton').disabled = !this.checked;
-    });
-</script>
-        </form>
+                    <div class="acceptance-checkbox" style="margin-bottom: 15px;">
+                        <input type="checkbox" id="acceptTerms" required>
+                        <label for="acceptTerms" style="color: rgb(0, 0, 0);">I have read and accept the terms and
+                            conditions</label>
+                    </div>
 
+
+                </div>
+
+                <!-- Submit button with JavaScript to check for acceptance -->
+                <div class="text-center my-4">
+                    <button type="submit" id="submitButton" class="btn btn-primary btn-lg px-5" disabled>Submit
+                        Application</button>
+                </div>
+
+                <script>
+                    document.getElementById('acceptTerms').addEventListener('change', function () {
+                        document.getElementById('submitButton').disabled = !this.checked;
+                    });
+                </script>
+            </form>
+
+        </div>
 
 
 
@@ -677,18 +800,15 @@
             <div class="row mb-3">
                 <div class="col-12">
                     <form action="{% url 'forms' %}" method="GET" class="d-flex">
-                        <input class="form-control me-2" type="search" 
-                               placeholder="Search by Name or Standard" 
-                               aria-label="Search" 
-                               name="query" 
-                               value="{{ search_query }}">
-                        <button class="btn btn-outline-primary " style="color: white;" type="submit">
+                        <input class="form-control me-2" type="search" placeholder="Search by Name or Standard"
+                            aria-label="Search" name="query" value="{{ search_query }}">
+                        <button class="btn btn-outline-primary " style="color: rgb(0, 0, 0);" type="submit">
                             <i class="fas fa-search"></i> Search
                         </button>
                     </form>
                 </div>
             </div>
-            
+
             {% if search_query %}
             <div class="alert alert-info d-flex justify-content-between align-items-center">
                 <span>
@@ -702,14 +822,14 @@
             {% endif %}
         </div>
         <!-- Display registered students section -->
-        <div class="container">
+        <div class="">
             <!-- Display logged in number -->
             <div class="header">
                 {% if registered_number %}
                 <strong>Logged in with:</strong> {{ registered_number }}
                 {% endif %}
             </div>
-        
+
             <!-- Only show students table -->
             {% if students %}
             <h2 class="text-center">Your Registered Students</h2>
@@ -756,59 +876,63 @@
                             <td>{{ forloop.counter }}</td>
                             <td>
                                 {% if student.student_photo %}
-                                    <img src="{{ student.student_photo.url }}" class="img-thumbnail" width="50">
+                                <img src="{{ student.student_photo.url }}" class="img-thumbnail" width="50">
                                 {% else %}
-                                    No Photo
+                                No Photo
                                 {% endif %}
                             </td>
-                            <td style="color: white;">{{ student.name }}</td>
-                            <td style="color: white;">{{ student.standard }}</td>
-                            <td style="color: white;">{{ student.dob }}</td>
-                            <td style="color: white;">{{ student.age }}</td>
-                            <td style="color: white;">{{ student.sex }}</td>
-                            <td style="color: white;">{{ student.address }}</td>
-                            <td style="color: white;">{{ student.nationality }}</td>
-                            <td style="color: white;">{{ student.mobile }}</td>
-                            <td style="color: white;">{{ student.aadhar_number }}</td>
-                            <td style="color: white;">{{ student.mother_tongue }}</td>
-                            <td style="color: white;">{{ student.religion }}</td>
-                            <td style="color: white;">{{ student.caste }}</td>
-                            <td style="color: white;">{{ student.blood_group }}</td>
-                            <td style="color: white;">{{ student.id_mark }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.name }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.standard }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.dob }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.age }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.sex }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.address }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.nationality }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.mobile }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.aadhar_number }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.mother_tongue }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.religion }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.caste }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.blood_group }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.id_mark }}</td>
                             <td>
                                 {% if student.parent.father_photo %}
-                                    <img src="{{ student.parent.father_photo.url }}" class="img-thumbnail" width="50">
+                                <img src="{{ student.parent.father_photo.url }}" class="img-thumbnail" width="50">
                                 {% else %}
-                                    No Photo
+                                No Photo
                                 {% endif %}
                             </td>
-                            <td style="color: white;">{{ student.parent.father_name }}</td>
-                            <td style="color: white;">{{ student.parent.father_job }}</td>
-                            <td style="color: white;">{{ student.parent.father_education }}</td>
-                            <td style="color: white;">{{ student.parent.father_mobile }}</td>
-                            <td style="color: white;">{{ student.parent.father_email }}</td>
-                            <td style="color: white;">{{ student.parent.father_place }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.parent.father_name }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.parent.father_job }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.parent.father_education }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.parent.father_mobile }}</td>
+                            <td style="color: rgb(4, 4, 4);">{{ student.parent.father_email }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.parent.father_place }}</td>
                             <td>
                                 {% if student.parent.mother_photo %}
-                                    <img src="{{ student.parent.mother_photo.url }}" class="img-thumbnail" width="50">
+                                <img src="{{ student.parent.mother_photo.url }}" class="img-thumbnail" width="50">
                                 {% else %}
-                                    No Photo
+                                No Photo
                                 {% endif %}
                             </td>
-                            <td style="color: white;">{{ student.parent.mother_name }}</td>
-                            <td style="color: white;">{{ student.parent.mother_job }}</td>
-                            <td style="color: white;">{{ student.parent.mother_education }}</td>
-                            <td style="color: white;">{{ student.parent.mother_mobile }}</td>
-                            <td style="color: white;">{{ student.parent.mother_email }}</td>
-                            <td style="color: white;">{{ student.parent.mother_place }}</td>
-                            <td style="color: white;">
+                            <td style="color: rgb(0, 0, 0);">{{ student.parent.mother_name }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.parent.mother_job }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.parent.mother_education }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.parent.mother_mobile }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.parent.mother_email }}</td>
+                            <td style="color: rgb(0, 0, 0);">{{ student.parent.mother_place }}</td>
+                            <td style="color: rgb(0, 0, 0);">
                                 {% if not student.is_approved %}
-                                    <a href="{% url 'edit_registered_student' student.id %}" class="btn btn-primary btn-sm" style="margin-bottom: 10px;">Edit</a>
+                                <a href="{% url 'edit_registered_student' student.id %}" class="btn btn-primary btn-sm"
+                                    style="margin-bottom: 10px;">Edit</a>
                                 {% else %}
-                                    <button class="btn btn-secondary btn-sm" disabled style="margin-bottom: 10px;">Edit</button>
-                                    <small class="text-muted" style="color: white;">(Approved - contact admin for changes)</small>
+                                <button class="btn btn-secondary btn-sm" disabled
+                                    style="margin-bottom: 10px;">Edit</button>
+                                <small class="text-muted" style="color: rgb(0, 0, 0);">(Approved - contact admin)</small>
                                 {% endif %}
-                                <a href="{% url 'student_delete' student.id %}" onclick="return confirm('Are you sure you want to delete this student?')" class="btn btn-danger">Delete</a>
+                                <a href="{% url 'student_delete' student.id %}"
+                                    onclick="return confirm('Are you sure you want to delete this student?')"
+                                    class="btn btn-danger">Delete</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -824,7 +948,7 @@
     <!-- Bootstrap JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Form validation and image preview script -->
     <script>
         // Form validation
@@ -842,17 +966,17 @@
                     }, false)
                 })
         })()
-        
+
         // Image preview functionality
         function setupImagePreview(inputId, previewId) {
             const input = document.getElementById(inputId);
             const preview = document.getElementById(previewId);
-            
+
             if (input && preview) {
-                input.addEventListener('change', function() {
+                input.addEventListener('change', function () {
                     if (this.files && this.files[0]) {
                         const reader = new FileReader();
-                        reader.onload = function(e) {
+                        reader.onload = function (e) {
                             preview.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 100%;">`;
                         }
                         reader.readAsDataURL(this.files[0]);
@@ -862,59 +986,59 @@
                 });
             }
         }
-        
+
         // Auto-capitalize name field
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const nameField = document.querySelector("input[name='name']");
             if (nameField) {
-                nameField.addEventListener("input", function() {
+                nameField.addEventListener("input", function () {
                     this.value = this.value.toUpperCase();
                 });
             }
-            
+
             // Setup preview for all photo inputs
             setupImagePreview('{{ student_form.student_photo.auto_id }}', 'studentPhotoPreview');
             setupImagePreview('{{ parent_form.father_photo.auto_id }}', 'fatherPhotoPreview');
             setupImagePreview('{{ parent_form.mother_photo.auto_id }}', 'motherPhotoPreview');
-            
+
             // Calculate age based on DOB
             const dobInput = document.getElementById('{{ student_form.dob.auto_id }}');
             const ageInput = document.getElementById('{{ student_form.age.auto_id }}');
-            
+
             if (dobInput && ageInput) {
-                dobInput.addEventListener('change', function() {
+                dobInput.addEventListener('change', function () {
                     if (this.value) {
                         const dob = new Date(this.value);
                         const today = new Date();
                         let age = today.getFullYear() - dob.getFullYear();
                         const monthDiff = today.getMonth() - dob.getMonth();
-                        
+
                         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
                             age--;
                         }
-                        
+
                         ageInput.value = age;
                     }
                 });
             }
-            
+
             // Enable submit button when terms are accepted
             const termsCheckbox = document.getElementById('acceptTerms');
             const submitButton = document.getElementById('submitButton');
-            
+
             if (termsCheckbox && submitButton) {
-                termsCheckbox.addEventListener('change', function() {
+                termsCheckbox.addEventListener('change', function () {
                     submitButton.disabled = !this.checked;
                 });
             }
-            
+
             // Mobile number validation
-            const validateMobileField = function(field) {
+            const validateMobileField = function (field) {
                 if (field) {
-                    field.addEventListener('input', function() {
+                    field.addEventListener('input', function () {
                         // Remove non-numeric characters
                         this.value = this.value.replace(/\D/g, '');
-                        
+
                         // Limit to 10 digits
                         if (this.value.length > 10) {
                             this.value = this.value.slice(0, 10);
@@ -922,19 +1046,19 @@
                     });
                 }
             };
-            
+
             // Validate all mobile fields
             validateMobileField(document.querySelector("input[name='mobile']"));
             validateMobileField(document.querySelector("input[name='father_mobile']"));
             validateMobileField(document.querySelector("input[name='mother_mobile']"));
-            
+
             // Aadhar number validation
             const aadharField = document.querySelector("input[name='aadhar_number']");
             if (aadharField) {
-                aadharField.addEventListener('input', function() {
+                aadharField.addEventListener('input', function () {
                     // Remove non-numeric characters
                     this.value = this.value.replace(/\D/g, '');
-                    
+
                     // Limit to 12 digits
                     if (this.value.length > 12) {
                         this.value = this.value.slice(0, 12);
@@ -944,4 +1068,5 @@
         });
     </script>
 </body>
+
 </html>

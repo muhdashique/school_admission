@@ -18,7 +18,7 @@
 
         /* Background */
         body {
-            background: #6D893E;
+            background: #FFF9D9;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -27,7 +27,7 @@
 
         /* Login Container */
         .login-container {
-            background: rgba(255, 255, 255, 0.1);
+            background: #0c3e6c;
             backdrop-filter: blur(10px);
             padding: 40px;
             border-radius: 12px;
@@ -101,6 +101,34 @@
             }
         }
     </style>
+    <style>
+        .home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #FFF9D9; /* Primary blue */
+            color: rgb(0, 0, 0);
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 10px; /* Pill-shaped */
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            margin-left: 210px;
+            margin-top: -20px;
+        }
+    
+        .home-btn i {
+            font-size: 18px;
+        }
+    
+        .home-btn:hover {
+            background-color: #0c3e6c; /* Darker blue on hover */
+            transform: scale(1.05); /* Slight zoom effect */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+    </style>
     <script>
         // Check if we're coming from a page that required authentication
         document.addEventListener('DOMContentLoaded', function() {
@@ -117,13 +145,13 @@
 </head>
 <body>
     <div class="login-container">
+        <a href="{% url 'index' %}" class="home-btn">
+            <i class="fas fa-home"></i> Back
+        </a>
         <h2>Admin Login</h2>
+       
         
-        {% if messages %}
-            {% for message in messages %}
-                <p class="message">{{ message }}</p>
-            {% endfor %}
-        {% endif %}
+    
         
         <form method="POST" action="{% url 'admin_login' %}">
             {% csrf_token %}

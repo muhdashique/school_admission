@@ -23,6 +23,7 @@ class MobileNumberForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
+        fields = '__all__'
         exclude = ['user'] 
         widgets = {
             'dob': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),

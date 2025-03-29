@@ -8,7 +8,7 @@
         /* Global Styles */
         body {
             font-family: Arial, sans-serif;
-            background-color: #97a482;
+            background-color: #FFF9D9;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -19,19 +19,20 @@
 
         /* Form Container */
         .form-container {
-            background-color: transparent;
+            background-color: whitesmoke;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 400px;
+            max-width: 700px;
             text-align: center;
+            margin-top: 150px;
         }
 
         /* Back Button */
         .back-button {
             display: flex;
-            justify-content: center;
+            justify-content: start;
             margin-bottom: 20px;
         }
 
@@ -68,7 +69,7 @@
         form p {
             margin-bottom: 15px;
             text-align: left;
-            color: white;
+            color: rgb(0, 0, 0);
         }
 
         input, textarea, select {
@@ -104,11 +105,11 @@
     <div class="form-container">
         <div class="back-button">
             <a href="{% url 'admin_panel' %}" class="btn btn-custom">
-                <i class="fas fa-arrow-left"></i> Back to Admin Panel
+                <i class="fas fa-arrow-left"></i> Back 
             </a>
         </div>
         
-        <h2 style="color: white;">Add or Update School Information</h2>
+        <h2 style="color: rgb(0, 0, 0);">Add or Update School Information</h2>
         
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}

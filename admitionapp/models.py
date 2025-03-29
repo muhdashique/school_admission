@@ -65,6 +65,16 @@ class Student(models.Model):
     id_mark = models.TextField(blank=True)
     student_photo = models.ImageField(upload_to='student_photos/', blank=True)
     is_approved = models.BooleanField(default=False)
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('cancel', 'Cancel'),
+    ]
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
 
     def __str__(self):
         return self.name

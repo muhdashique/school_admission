@@ -3,14 +3,16 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://admission.imcbs.com',
+CSRF_TRUSTED_ORIGINS = ['https://admission.imcbs.com'
+    ,
     
 ]
 # Security settings
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "your-default-secret-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() == "true"
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['admission.imcbs.com','www.admission.imcbs.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -55,7 +57,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'admitionproject.wsgi.application'
 
-#Database settings
+# Database settings
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
