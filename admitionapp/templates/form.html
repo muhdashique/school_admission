@@ -304,6 +304,7 @@
             font-size: 14px;
             transition: all 0.3s ease;
             border: 1px solid #d31313;
+            margin-bottom: 30px;
         }
         
         .logout-button:hover {
@@ -327,9 +328,9 @@
             <!-- Text center for messages -->
             <div class="text-center mb-4">
                 <h1 style="color: rgb(0, 0, 0);">Student Admission Form</h1>
-                <div class="text-center" style="margin-bottom: 70px;">
+                <div class="text-center" style="margin-bottom: 80px;">
                     {% if registered_number %}
-                    <h2 style="color: rgb(0, 0, 0);">Welcome, {{ registered_number }}</h2>
+                    <h2 style="color: rgb(0, 0, 0); margin-bottom: 30px;">Welcome, {{ registered_number }}</h2>
                     {% endif %}
                 </div>
             </div>
