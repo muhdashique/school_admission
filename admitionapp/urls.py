@@ -25,4 +25,5 @@ urlpatterns = [
      path('approve-student/<int:student_id>/', views.approve_student, name='approve_student'),
      path('toggle-approval/<int:student_id>/', views.toggle_approval, name='toggle_approval'),
      path('set-status/<int:student_id>/<str:status>/', views.set_status, name='set_status'),
+     path('check-session/', views.check_session, name='check_session'),
 ]

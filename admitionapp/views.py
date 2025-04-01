@@ -301,8 +301,6 @@ def delete_student(request, student_id):
 
 
 def edit_registered_student(request, student_id):
-    is_mobile = request.user_agent.is_mobile
-    logger.info(f"Edit request from {'mobile' if is_mobile else 'desktop'} device")
     student = get_object_or_404(Student, id=student_id)
     registered_number = request.session.get('registered_number')
     
