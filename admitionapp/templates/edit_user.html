@@ -27,6 +27,21 @@
         .btn {
             width: 100%;
         }
+        /* Hide any approval-related fields that might be dynamically added */
+        .field-is_approved, .field-status, [id*="is_approved"], [id*="status"] {
+            display: none;
+        }
+        .current-images {
+            margin-bottom: 15px;
+        }
+        .current-images img {
+            max-width: 100px;
+            max-height: 100px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 3px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -34,11 +49,32 @@
         <div class="card">
             <div class="card-header">Edit Registered Student</div>
             <div class="card-body">
+                {% if current_photo or current_birth_certificate %}
+                <div class="current-images">
+                    <h5>Current Files:</h5>
+                    {% if current_photo %}
+                    <div>
+                        <p>Current Photo:</p>
+                        <img src="{{ current_photo.url }}" alt="Current student photo">
+                    </div>
+                    {% endif %}
+                    
+                    {% if current_birth_certificate %}
+                    <div>
+                        <p>Current Birth Certificate:</p>
+                        <img src="{{ current_birth_certificate.url }}" alt="Current birth certificate">
+                    </div>
+                    {% endif %}
+                    <p class="text-muted small">* Only upload new files if you want to replace the existing ones</p>
+                </div>
+                <hr>
+                {% endif %}
+                
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit" class="btn btn-success mt-3">Save Changes</button>
-                    <a href="{% url 'admission_form' %}" class="btn btn-secondary mt-2">Cancel</a>
+                    <a href="{% url 'forms' %}" class="btn btn-secondary mt-2">Cancel</a>
                 </form>
             </div>
         </div>
@@ -46,29 +82,26 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Check session on page load
-            checkSession();
+            // Additional security: Hide any approval-related fields that might be in the form
+            const approvalFields = document.querySelectorAll('[name*="is_approved"], [name*="status"]');
+            approvalFields.forEach(field => {
+                const parentElement = field.closest('.form-group') || field.parentElement;
+                if (parentElement) {
+                    parentElement.style.display = 'none';
+                }
+            });
             
-            // Set up periodic session checking (every 30 seconds)
-            setInterval(checkSession, 30000);
-            
-            function checkSession() {
-                fetch('{% url "check_session" %}', { 
-                    credentials: 'same-origin',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.authenticated) {
-                        window.location.href = "{% url 'login' %}";
-                    }
-                })
-                .catch(error => {
-                    console.error('Session check failed:', error);
-                });
-            }
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    fetch('/check-session/', { credentials: 'same-origin' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.authenticated) {
+                                window.location.href = "/login/";
+                            }
+                        });
+                }
+            });
         });
     </script>
 </body>
