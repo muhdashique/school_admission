@@ -937,7 +937,9 @@
                             <td style="color: rgb(0, 0, 0);">{{ student.parent.mother_place }}</td>
                             <td style="color: rgb(0, 0, 0);">
                                 {% if not student.is_approved %}
-                                <a href="{% url 'edit_registered_student' student.id %}" class="edit-btn">Edit</a>
+                                <a href="{% url 'edit_registered_student' student.id %}" class="edit-btn">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
 
                                 {% else %}
                                 <button class="btn btn-secondary btn-sm" disabled
@@ -1080,6 +1082,9 @@
                 });
             }
         });
+
+
+        
     </script>
 </body>
 

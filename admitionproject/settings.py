@@ -120,3 +120,11 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# settings.py
+SESSION_COOKIE_SECURE = False  # Set to True if using HTTPS
+SESSION_COOKIE_SAMESITE = 'Lax'  # Helps with cross-domain requests
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 3600 * 24 * 7  # 1 week in seconds
+SESSION_SAVE_EVERY_REQUEST = True  # Helps keep session alive

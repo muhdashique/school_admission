@@ -46,17 +46,29 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            window.addEventListener('pageshow', function(event) {
-                if (event.persisted) {
-                    fetch('/check-auth/', { credentials: 'same-origin' })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (!data.authenticated) {
-                                window.location.href = "{% url 'admin_login' %}";
-                            }
-                        });
-                }
-            });
+            // Check session on page load
+            checkSession();
+            
+            // Set up periodic session checking (every 30 seconds)
+            setInterval(checkSession, 30000);
+            
+            function checkSession() {
+                fetch('{% url "check_session" %}', { 
+                    credentials: 'same-origin',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.authenticated) {
+                        window.location.href = "{% url 'login' %}";
+                    }
+                })
+                .catch(error => {
+                    console.error('Session check failed:', error);
+                });
+            }
         });
     </script>
 </body>

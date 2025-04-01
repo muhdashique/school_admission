@@ -299,12 +299,18 @@ def delete_student(request, student_id):
 
 
 
-@login_required
+
 def edit_registered_student(request, student_id):
+    is_mobile = request.user_agent.is_mobile
+    logger.info(f"Edit request from {'mobile' if is_mobile else 'desktop'} device")
     student = get_object_or_404(Student, id=student_id)
+    registered_number = request.session.get('registered_number')
     
-    # Remove the admin check and only check if the student belongs to the logged-in user
-    if student.mobile != request.session.get('registered_number'):
+    if not registered_number:
+        messages.error(request, "Please log in first.")
+        return redirect('login')
+        
+    if student.mobile != registered_number:
         messages.error(request, "You can only edit your own students.")
         return redirect('forms')
     
@@ -314,15 +320,16 @@ def edit_registered_student(request, student_id):
         form = StudentForm(request.POST, request.FILES, instance=student)
         if form.is_valid():
             form.save()
-            return redirect('admission_form')
+            messages.success(request, "Student updated successfully!")
+            return redirect('forms')
     else:
         form = StudentForm(instance=student)
     
     return render(request, 'edit_user.html', {
         'form': form,
-        'school': school
+        'school': school,
+        'registered_number': registered_number  # Pass this to template
     })
-
 
 
 
