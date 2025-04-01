@@ -303,9 +303,9 @@ def delete_student(request, student_id):
 def edit_registered_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     
-    # Prevent editing approved students from the form
-    if student.is_approved and not request.user.is_staff:
-        messages.error(request, "This student has been approved and cannot be edited. Please contact the administrator for changes.")
+    # Remove the admin check and only check if the student belongs to the logged-in user
+    if student.mobile != request.session.get('registered_number'):
+        messages.error(request, "You can only edit your own students.")
         return redirect('forms')
     
     school = SchoolInfo.objects.first()
@@ -579,3 +579,12 @@ def set_status(request, student_id, status):
     
     messages.success(request, f"Student {student.name} status updated to {student.get_status_display()}.")
     return redirect('admin_panel')
+
+
+
+
+def check_session(request):
+    """Check if user session is still valid"""
+    return JsonResponse({
+        'authenticated': 'registered_number' in request.session
+    })
