@@ -6,6 +6,9 @@
     <title>Admin Panel - Student Records</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #3498db;
@@ -16,11 +19,12 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Barlow", sans-serif;
             background-color: #fff9d9;
             padding: 0;
             margin: 0;
             display: flex;
+            margin-top: 50px;
         }
         
         /* Sidebar Navigation Styles */
@@ -140,7 +144,7 @@
             background: transparent;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(255, 251, 251, 0.1);
             margin-top: 20px;
             overflow-x: auto;
         }
@@ -411,7 +415,7 @@
             {% if school.logo %}
                 <img src="{{ school.logo.url }}" alt="School Logo">
             {% else %}
-                <img src="/api/placeholder/150/150" alt="School Logo">
+                <img src="https://www.freeiconspng.com/thumbs/welcome-png/welcome-photos-png-31.png" alt="School Logo">
             {% endif %}
             <h5> Hello,{{ request.user.username }}</h5>
             <p>Administrator</p>
@@ -471,13 +475,7 @@
         
         <div class=" school-info-section">
             <div class="row">
-                <!-- <div class="col-md-3 text-center">
-                    {% if school.logo %}
-                        <img src="{{ school.logo.url }}" alt="School Logo" class="school-logo img-fluid">
-                    {% else %}
-                        <img src="/api/placeholder/150/150" alt="School Logo" class="school-logo img-fluid">
-                    {% endif %}
-                </div> -->
+               
                 <div class="col-md-9">
                     <h3 class="mb-3" style="color: rgb(0, 0, 0);">{{ school.name|default:"School Name" }}</h3>
                     <div class="school-details">

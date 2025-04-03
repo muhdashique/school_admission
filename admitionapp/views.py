@@ -44,17 +44,14 @@ def mobile_login(request):
 def forms(request):
     registered_number = request.session.get('registered_number', None)
     
-    # Get the search query from the request
     search_query = request.GET.get('query', '').strip()
     
-    # Base queryset for students
     students = Student.objects.filter(mobile=registered_number)
     
-    # If there's a search query, filter the students
     if search_query:
         students = students.filter(
-            Q(name__icontains=search_query) |  # Search by name
-            Q(standard__name__icontains=search_query)  # Search by standard
+            Q(name__icontains=search_query) |  
+            Q(standard__name__icontains=search_query)  
         )
     
     student_form = StudentForm(initial={'mobile': registered_number})
@@ -303,6 +300,7 @@ def delete_student(request, student_id):
 def edit_registered_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     registered_number = request.session.get('registered_number')
+    parent = get_object_or_404(Parent, student=student)
     
     if not registered_number:
         messages.error(request, "Please log in first.")
@@ -317,16 +315,43 @@ def edit_registered_student(request, student_id):
     if request.method == "POST":
         form = StudentForm(request.POST, request.FILES, instance=student)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Student updated successfully!")
+            # Save student data
+            student = form.save()
+            
+            # Update parent data
+            parent.father_name = request.POST.get('father_name', '')
+            parent.father_job = request.POST.get('father_job', '')
+            parent.father_mobile = request.POST.get('father_mobile', '')
+            parent.father_email = request.POST.get('father_email', '')
+            parent.father_education = request.POST.get('father_education', '')
+            parent.father_place = request.POST.get('father_place', '')
+            
+            parent.mother_name = request.POST.get('mother_name', '')
+            parent.mother_job = request.POST.get('mother_job', '')
+            parent.mother_mobile = request.POST.get('mother_mobile', '')
+            parent.mother_email = request.POST.get('mother_email', '')
+            parent.mother_education = request.POST.get('mother_education', '')
+            parent.mother_place = request.POST.get('mother_place', '')
+            
+            # Handle file uploads
+            if 'father_photo' in request.FILES:
+                parent.father_photo = request.FILES['father_photo']
+            if 'mother_photo' in request.FILES:
+                parent.mother_photo = request.FILES['mother_photo']
+            
+            parent.save()
+            
+            messages.success(request, "Student and parent information updated successfully!")
             return redirect('forms')
     else:
         form = StudentForm(instance=student)
     
     return render(request, 'edit_user.html', {
         'form': form,
+        'parent': parent,
         'school': school,
-        'registered_number': registered_number  # Pass this to template
+        'registered_number': registered_number,
+        'current_photo': student.student_photo if student.student_photo else None
     })
 
 
@@ -341,7 +366,7 @@ def student_delete(request, student_id):
     except Student.DoesNotExist:
         messages.error(request, "Student not found!")
     
-    return redirect('student_list')  # Change this to the correct list page name
+    return redirect('student_list') 
 
 
 
@@ -358,9 +383,7 @@ def admin_login(request):
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
-            # Check if user is staff/admin
             if user.is_staff or user.is_superuser:
-                # Log the user in using the imported auth_login
                 auth_login(request, user)
                 messages.success(request, "Login successful!")
                 return redirect('admin_panel')
@@ -518,15 +541,13 @@ def search_students(request):
     """View to search students based on mobile, name, or standard"""
     query = request.GET.get('query', '').strip()
     
-    # Base queryset with select_related for parent to reduce database queries
     students = Student.objects.select_related('parent')
     
     if query:
-        # Search across multiple fields
         students = students.filter(
-            Q(mobile__icontains=query) |  # Search by mobile
-            Q(name__icontains=query) |    # Search by name
-            Q(standard__name__icontains=query)  # Search by standard
+            Q(mobile__icontains=query) |  
+            Q(name__icontains=query) |   
+            Q(standard__name__icontains=query)  
         )
     
     school = SchoolInfo.objects.first()
@@ -558,7 +579,7 @@ def approve_student(request, student_id):
 @user_passes_test(lambda u: u.is_staff or u.is_superuser)
 def toggle_approval(request, student_id):
     student = get_object_or_404(Student, id=student_id)
-    student.is_approved = not student.is_approved  # Toggle the approval status
+    student.is_approved = not student.is_approved  
     student.save()
     
     messages.success(request, f"Student {student.name} status updated to {'Approved' if student.is_approved else 'Pending'}.")

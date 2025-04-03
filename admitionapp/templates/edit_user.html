@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Registered Student</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #f8f9fa;
+            font-family:"Barlow", sans-serif;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin-top: 50px;
         }
         .card {
@@ -42,6 +46,14 @@
             padding: 3px;
             margin-bottom: 10px;
         }
+        .section-title {
+            background-color: #f0f0f0;
+            padding: 8px;
+            border-radius: 5px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -72,7 +84,88 @@
                 
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+                    
+                    <!-- Student Information Section -->
+                    <div class="section-title">Student Information</div>
                     {{ form.as_p }}
+                    
+                    <!-- Parent Information Section -->
+                    <div class="section-title">Parent Information</div>
+                    
+                    <!-- Father's Details -->
+                    <div class="section-title" style="font-size: 1rem;">Father's Details</div>
+                    <div class="mb-3">
+                        <label for="father_name" class="form-label">Father's Name</label>
+                        <input type="text" class="form-control" id="father_name" name="father_name" value="{{ parent.father_name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="father_job" class="form-label">Occupation</label>
+                        <input type="text" class="form-control" id="father_job" name="father_job" value="{{ parent.father_job }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="father_mobile" class="form-label">Mobile Number</label>
+                        <input type="text" class="form-control" id="father_mobile" name="father_mobile" value="{{ parent.father_mobile }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="father_email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="father_email" name="father_email" value="{{ parent.father_email }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="father_education" class="form-label">Education</label>
+                        <input type="text" class="form-control" id="father_education" name="father_education" value="{{ parent.father_education }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="father_place" class="form-label">Native Place</label>
+                        <input type="text" class="form-control" id="father_place" name="father_place" value="{{ parent.father_place }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="father_photo" class="form-label">Father's Photo</label>
+                        <input type="file" class="form-control" id="father_photo" name="father_photo">
+                        {% if parent.father_photo %}
+                        <div class="mt-2">
+                            <small>Current Photo:</small>
+                            <img src="{{ parent.father_photo.url }}" alt="Father's photo" style="max-width: 100px; max-height: 100px;" class="img-thumbnail">
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Mother's Details -->
+                    <div class="section-title" style="font-size: 1rem;">Mother's Details</div>
+                    <div class="mb-3">
+                        <label for="mother_name" class="form-label">Mother's Name</label>
+                        <input type="text" class="form-control" id="mother_name" name="mother_name" value="{{ parent.mother_name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="mother_job" class="form-label">Occupation</label>
+                        <input type="text" class="form-control" id="mother_job" name="mother_job" value="{{ parent.mother_job }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="mother_mobile" class="form-label">Mobile Number</label>
+                        <input type="text" class="form-control" id="mother_mobile" name="mother_mobile" value="{{ parent.mother_mobile }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="mother_email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="mother_email" name="mother_email" value="{{ parent.mother_email }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="mother_education" class="form-label">Education</label>
+                        <input type="text" class="form-control" id="mother_education" name="mother_education" value="{{ parent.mother_education }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="mother_place" class="form-label">Native Place</label>
+                        <input type="text" class="form-control" id="mother_place" name="mother_place" value="{{ parent.mother_place }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="mother_photo" class="form-label">Mother's Photo</label>
+                        <input type="file" class="form-control" id="mother_photo" name="mother_photo">
+                        {% if parent.mother_photo %}
+                        <div class="mt-2">
+                            <small>Current Photo:</small>
+                            <img src="{{ parent.mother_photo.url }}" alt="Mother's photo" style="max-width: 100px; max-height: 100px;" class="img-thumbnail">
+                        </div>
+                        {% endif %}
+                    </div>
+                    
                     <button type="submit" class="btn btn-success mt-3">Save Changes</button>
                     <a href="{% url 'forms' %}" class="btn btn-secondary mt-2">Cancel</a>
                 </form>
