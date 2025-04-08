@@ -59,27 +59,27 @@ TEMPLATES = [
 WSGI_APPLICATION = 'admitionproject.wsgi.application'
 
 # Database settings
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("DB_NAME", "admitionproject"),
-        'USER': os.getenv("DB_USER", "postgres"),
-        'PASSWORD': os.getenv("DB_PASSWORD", "1234"),
-        'HOST': os.getenv("DB_HOST", "localhost"),
-        'PORT': os.getenv("DB_PORT", "5432"),
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'admission',  # Replace with your database name
-#         'USER': 'postgres',  # Replace with your database username
-#         'PASSWORD': 'info@imc',  # Replace with your database password
-#         'HOST': 'localhost',  # Use 'localhost' for local development
-#         'PORT': '5432',  # Default PostgreSQL port
+#         'NAME': os.getenv("DB_NAME", "admitionproject"),
+#         'USER': os.getenv("DB_USER", "postgres"),
+#         'PASSWORD': os.getenv("DB_PASSWORD", "1234"),
+#         'HOST': os.getenv("DB_HOST", "localhost"),
+#         'PORT': os.getenv("DB_PORT", "5432"),
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'admission',  # Replace with your database name
+        'USER': 'postgres',  # Replace with your database username
+        'PASSWORD': 'info@imc',  # Replace with your database password
+        'HOST': 'localhost',  # Use 'localhost' for local development
+        'PORT': '5432',  # Default PostgreSQL port
+    }
+}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
