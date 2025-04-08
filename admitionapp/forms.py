@@ -1,5 +1,5 @@
 from django import forms
-from .models import SchoolInfo, User, Student, Parent, Standard
+from .models import SchoolInfo, User, Student, Parent
 
 class MobileNumberForm(forms.ModelForm):
     class Meta:
@@ -19,19 +19,35 @@ class MobileNumberForm(forms.ModelForm):
         return mobile
 
 
+# Add this to your forms.py file
+from django import forms
+from .models import Student, Parent, SchoolInfo, Standard
+
+class StandardForm(forms.ModelForm):
+    class Meta:
+        model = Standard
+        fields = ['name', 'value']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'value': forms.TextInput(attrs={'class': 'form-control'})
+        }
 
 class StudentForm(forms.ModelForm):
+    standard = forms.ModelChoiceField(
+        queryset=Standard.objects.all(),
+        empty_label="-- Select Standard --",
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=True
+    )
+    
     class Meta:
         model = Student
         fields = '__all__'
-        exclude = ['user'] 
+        exclude = ['user', 'status', 'is_approved'] 
         widgets = {
             'dob': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'standard': forms.Select(attrs={
-                'class': 'form-control',
-            }, choices=[('', '-- Select Standard --')] + [(str(std.id), std.name) for std in Standard.objects.all()]), 
-            'mobile': forms.TextInput(attrs={'class': 'form-control'}),
+            'mobile': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
             'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'sex': forms.Select(attrs={
                 'class': 'form-control',
@@ -59,11 +75,8 @@ class StudentForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
-        # Ensure the standard field has the latest choices
-        self.fields['standard'].widget.choices = [('', '-- Select Standard --')] + [
-            (str(std.id), std.name) for std in Standard.objects.all()
-        ]
         self.fields['mobile'].widget.attrs['readonly'] = True
+
 
 class ParentForm(forms.ModelForm):
     class Meta:
@@ -117,12 +130,4 @@ class SchoolInfoForm(forms.ModelForm):
 
 
 
-        # standard
-class StandardForm(forms.ModelForm):
-    class Meta:
-        model = Standard
-        fields = ['name','value']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Standard/Class Name'}),
-            'value': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Value'})  
-        }
+ 

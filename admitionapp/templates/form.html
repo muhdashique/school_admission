@@ -374,8 +374,8 @@
             <div class="form-title">APPLICATION FOR ADMISSION</div>
 
             <form method="post" enctype="multipart/form-data" class="needs-validation"
-                action="{% url 'admission_form' %}" novalidate>
-                {% csrf_token %}
+             action="{% url 'admission_form' %}" novalidate>
+             {% csrf_token %}
 
                 <!-- Student Information Section -->
                 <div class="form-section">
@@ -407,15 +407,20 @@
 
                         <!-- Standard/Class field -->
                         <div class="col-md-6">
-                            <label for="{{ student_form.standard.id_for_label }}" class="form-label required-field "
-                                style="color: rgb(0, 0, 0);">Class/Standard</label>
+                            <label for="{{ student_form.standard.id_for_label }}" class="form-label required-field" style="color: rgb(0, 0, 0);">
+                                Class/Standard
+                            </label>
                             {{ student_form.standard }}
                             {% if student_form.standard.errors %}
-                            <div class="errorlist">
-                                {{ student_form.standard.errors }}
-                            </div>
+                                <div class="errorlist">
+                                    {{ student_form.standard.errors }}
+                                </div>
                             {% endif %}
                         </div>
+                        
+                        
+                        
+                        
 
                         <!-- Date of Birth field -->
                         <div class="col-md-4">
@@ -1087,7 +1092,29 @@
         });
 
 
-        
+        // Add this to your existing script section
+document.querySelectorAll('.needs-validation input, .needs-validation select').forEach(input => {
+    input.addEventListener('change', function() {
+        if (!this.checkValidity()) {
+            this.classList.add('is-invalid');
+            // Find or create error display element
+            let errorDisplay = this.nextElementSibling;
+            if (!errorDisplay || !errorDisplay.classList.contains('invalid-feedback')) {
+                errorDisplay = document.createElement('div');
+                errorDisplay.className = 'invalid-feedback';
+                this.parentNode.insertBefore(errorDisplay, this.nextSibling);
+            }
+            errorDisplay.textContent = this.validationMessage;
+        } else {
+            this.classList.remove('is-invalid');
+            this.classList.add('is-valid');
+            let errorDisplay = this.nextElementSibling;
+            if (errorDisplay && errorDisplay.classList.contains('invalid-feedback')) {
+                errorDisplay.textContent = '';
+            }
+        }
+    });
+});
     </script>
 </body>
 

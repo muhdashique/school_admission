@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Standard/Class</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Updated Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #FFF9D9;
@@ -41,6 +42,29 @@
             background-color: #5a6268;
             border-color: #000000;
         }
+        
+        .btn-custom {
+            background-color: #343a40; /* Dark grey */
+            color: #ffffff; /* White text */
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-custom:hover {
+            background-color: #212529; /* Slightly darker on hover */
+            color: #f8f9fa; /* Light grey text */
+        }
+
+        .btn-custom i {
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -70,7 +94,7 @@
                                 {% endif %}
                             </div>
                             <div class="mb-3">
-                                <label for="{{ form.value.id_for_label }}" class="form-label">Value</label>
+                                <label for="{{ form.value.id_for_label }}" class="form-label">Standard Value</label>
                                 {{ form.value }}
                                 {% if form.value.errors %}
                                     <div class="text-danger">
@@ -81,7 +105,6 @@
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Add Standard</button>
                                 <a href="{% url 'standard_list' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to List</a>
-                                
                             </div>
                         </form>
                     </div>
@@ -89,47 +112,16 @@
             </div>
         </div>
     </div>
-    <!-- Add this near the top of your adminpanel.html, just below the header section -->
-
-
-<style>
-.btn-custom {
-    background-color: #343a40; /* Dark grey */
-    color: #ffffff; /* White text */
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: 500;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.btn-custom:hover {
-    background-color: #212529; /* Slightly darker on hover */
-    color: #f8f9fa; /* Light grey text */
-}
-
-.btn-custom i {
-    font-size: 18px;
-}
-</style>
 
     <script>
         // Check if user is still logged in when coming back to this page via browser back button
         document.addEventListener('DOMContentLoaded', function() {
-            // This function runs when page loads from cache (e.g., when using back button)
             window.addEventListener('pageshow', function(event) {
-                // Check if page is loaded from cache
                 if (event.persisted) {
-                    // Make a quick AJAX request to check auth status
                     fetch('/check-auth/', { credentials: 'same-origin' })
                         .then(response => response.json())
                         .then(data => {
                             if (!data.authenticated) {
-                                // Redirect to login page if not authenticated
                                 window.location.href = "{% url 'admin_login' %}";
                             }
                         });

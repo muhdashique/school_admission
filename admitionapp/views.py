@@ -3,8 +3,8 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import User, Student, Parent, SchoolInfo, Standard
-from .forms import MobileNumberForm, StudentForm, ParentForm, SchoolInfoForm, StandardForm
+from .models import User, Student, Parent, SchoolInfo,Standard
+from .forms import MobileNumberForm, StudentForm, ParentForm, SchoolInfoForm,StandardForm
 from .otp_service import send_otp, verify_otp
 from django.db.models import Q
 import logging
@@ -40,18 +40,21 @@ def mobile_login(request):
 
 
 
-
 def forms(request):
     registered_number = request.session.get('registered_number', None)
     
+    if not registered_number:
+        return redirect('login')
+    
     search_query = request.GET.get('query', '').strip()
     
+    # Get students for the logged-in user's mobile number
     students = Student.objects.filter(mobile=registered_number)
     
     if search_query:
         students = students.filter(
             Q(name__icontains=search_query) |  
-            Q(standard__name__icontains=search_query)  
+            Q(standard__icontains=search_query)  
         )
     
     student_form = StudentForm(initial={'mobile': registered_number})
@@ -153,19 +156,18 @@ def verify_otp_view(request):
 
 
 
-
-
-
 def admission_form(request):
-    registered_number = request.session.get('registered_number', None)
+    registered_number = request.session.get('registered_number')
     
     if not registered_number:
         messages.error(request, "Please log in first.")
         return redirect('login')
     
-    
-    user, created = User.objects.get_or_create(mobile=registered_number)
-    
+    try:
+        user = User.objects.get(mobile=registered_number)
+    except User.DoesNotExist:
+        user = User.objects.create(mobile=registered_number)
+        user.save()
     
     school = SchoolInfo.objects.first()
     
@@ -173,71 +175,63 @@ def admission_form(request):
         student_form = StudentForm(request.POST, request.FILES)
         parent_form = ParentForm(request.POST, request.FILES)
         
-        logger.info("Processing form submission")
-        
-        
-        if not student_form.is_valid():
-            for field, errors in student_form.errors.items():
-                for error in errors:
-                    logger.error(f"Student form error in field '{field}': {error}")
-                   
-                    messages.error(request, f"Error in {field}: {error}")
-        
-        if not parent_form.is_valid():
-            for field, errors in parent_form.errors.items():
-                for error in errors:
-                    logger.error(f"Parent form error in field '{field}': {error}")
-                    
-                    messages.error(request, f"Error in {field}: {error}")
+        # Set initial values for student form
+        student_form.initial['mobile'] = registered_number
         
         if student_form.is_valid() and parent_form.is_valid():
             try:
-               
-                student = student_form.save(commit=False)
-                student.mobile = registered_number  
-                student.user = user  
-                student.save()
+                # Begin transaction
+                from django.db import transaction
+                with transaction.atomic():
+                    # Save student
+                    student = student_form.save(commit=False)
+                    student.mobile = registered_number
+                    student.user = user
+                    student.status = 'pending'
+                    student.save()
+                    
+                    # Save parent
+                    parent = parent_form.save(commit=False)
+                    parent.student = student
+                    parent.save()
                 
-                logger.info(f"Student saved: {student.name}")
-                
-                
-                parent = parent_form.save(commit=False)
-                parent.student = student
-                parent.save()
-                logger.info(f"Parent saved for student: {student.name}")
-                
-               
-                messages.success(request, "Student and parent information saved successfully!")
-                
-               
+                messages.success(request, "Form submitted successfully!")
                 return redirect('forms')
-            
             except Exception as e:
-                logger.error(f"Error saving form: {str(e)}", exc_info=True)
                 messages.error(request, f"Error saving data: {str(e)}")
+                logger.error(f"Error saving form: {str(e)}", exc_info=True)
         else:
+            # Detailed error logging
+            logger.error("Form validation failed")
             
-            messages.error(request, "Please correct the errors below.")
+            # Student form errors
+            if student_form.errors:
+                logger.error(f"Student form errors: {student_form.errors}")
+                for field, errors in student_form.errors.items():
+                    for error in errors:
+                        logger.error(f"Field '{field}': {error}")
+                        messages.error(request, f"Student {field}: {error}")
+            
+            # Parent form errors
+            if parent_form.errors:
+                logger.error(f"Parent form errors: {parent_form.errors}")
+                for field, errors in parent_form.errors.items():
+                    for error in errors:
+                        logger.error(f"Field '{field}': {error}")
+                        messages.error(request, f"Parent {field}: {error}")
     else:
-        #
         student_form = StudentForm(initial={'mobile': registered_number})
         parent_form = ParentForm()
     
-
-        student_form.fields['mobile'].widget.attrs['readonly'] = True
-  
     students = Student.objects.filter(mobile=registered_number)
     
-   
     return render(request, 'form.html', {
-        'student_form': student_form, 
+        'student_form': student_form,
         'parent_form': parent_form,
         'students': students,
         'registered_number': registered_number,
-        'title': 'Student Admission Form',
         'school': school
     })
-
 
 
 
@@ -448,20 +442,14 @@ def add_school_info(request):
 
 
 
-# Standard section
+# # # Standard section
 @login_required
 @user_passes_test(lambda u: u.is_staff or u.is_superuser)
 def add_standard(request):
     if request.method == 'POST':
         form = StandardForm(request.POST)
         if form.is_valid():
-            standard = form.save(commit=False)
-
-           
-            if standard.value is None:
-                standard.value = 0
-            
-            standard.save()
+            form.save()  # Save the form directly without any custom handling
             messages.success(request, "Standard added successfully!")
             return redirect('standard_list')
     else:
